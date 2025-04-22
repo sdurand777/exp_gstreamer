@@ -1,0 +1,20 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+
+message StreamInfo {
+  string device_id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  google.protobuf.Timestamp systemtime = 3;
+  int32 id = 4;
+  int32 trig_id = 5;
+  int64 pts = 15;
+  string channel = 6;
+  string clock_id = 7;
+  string filename = 8;
+  string session_name = 14;
+  int32 width = 16;
+  int32 height = 17;
+}
+
+
