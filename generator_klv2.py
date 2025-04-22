@@ -12,7 +12,7 @@ gi.require_version('Gst', '1.0')
 from gi.repository import Gst, GObject, GLib
 
 # --- Configuration ---
-FPS           = 10
+FPS           = 1
 TCP_HOST      = "127.0.0.1"
 TCP_PORT      = 7000
 
@@ -24,7 +24,10 @@ meta_index     = 1
 frame_duration = Gst.SECOND // FPS
 
 def on_need_data_meta(appsrc, length):
-    global meta_index
+    global meta_index, timestamp_ns
+
+    # → on ralentit ici pour ne pas dépasser 1 image par seconde
+    time.sleep(1.0 / FPS)
 
     # Construction du StreamInfo protobuf
     info = info_pb2.StreamInfo()
@@ -59,11 +62,21 @@ def on_message(bus, message, loop):
 
 def main():
     Gst.init(None)
+
+    # pipeline = Gst.parse_launch(
+    #     f"appsrc name=klvsrc is-live=true block=false format=time do-timestamp=true "
+    #     "caps=\"meta/x-klv,parsed=(boolean)true\" ! "
+    #     f"queue ! mpegtsmux ! tcpserversink host={TCP_HOST} port={TCP_PORT} sync=false"
+    #     )
+
     pipeline = Gst.parse_launch(
-        f"appsrc name=klvsrc is-live=true block=false format=time do-timestamp=true "
-        "caps=\"meta/x-klv,parsed=(boolean)true\" ! "
-        f"queue ! mpegtsmux ! tcpserversink host={TCP_HOST} port={TCP_PORT} sync=false"
-    )
+            f"appsrc name=klvsrc "
+            f"is-live=true block=true format=time do-timestamp=true "
+            # on indique ici la cadence
+            f"caps=\"meta/x-klv,parsed=(boolean)true,framerate={FPS}/1\" ! "
+            "queue ! mpegtsmux ! tcpserversink "
+            f"host={TCP_HOST} port={TCP_PORT} sync=false"
+            )
     klvsrc = pipeline.get_by_name('klvsrc')
     klvsrc.connect('need-data', on_need_data_meta)
 

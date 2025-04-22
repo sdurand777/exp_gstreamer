@@ -12,7 +12,7 @@ from gi.repository import Gst, GObject, GLib
 # --- Configuration ---
 IMAGE_DIR     = "/home/smith/dataset/sequences/00/image_0/jpgs"
 PATTERN       = "%06d.jpg"          # ex. 000001.jpg, 000002.jpg, …
-FPS           = 10
+FPS           = 1
 VIDEO_SRT_URI = "srt://127.0.0.1:6020?mode=listener"
 # TCP settings for KLV over MPEG-TS
 TCP_HOST      = "127.0.0.1"
