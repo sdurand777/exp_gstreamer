@@ -22,7 +22,7 @@ IMAGE_DIR = "/home/ivm/escargot/imgs"
 meta_buffer = deque(maxlen=200)
 last_meta_filename = None
 #TOLERANCE = 0.05  # tolérance en secondes pour la synchronisation
-TOLERANCE = 0.20 # tolérance en secondes pour la synchronisation
+TOLERANCE = 0.20  # tolérance en secondes pour la synchronisation
 
 # --- Fenêtre OpenCV pour affichage concaténé ---
 cv2.namedWindow("SyncView", cv2.WINDOW_AUTOSIZE)
@@ -32,29 +32,26 @@ def display_side_by_side(video_frame, klv_filename):
     """
     Affiche la vidéo seule si pas de KLV ou concatène la vidéo et l'image KLV sur une même fenêtre.
     """
-    # Si pas de nom de fichier KLV, affiche juste la vidéo
     if klv_filename is None:
         cv2.imshow("SyncView", video_frame)
         cv2.waitKey(1)
         return False
 
-    # Charge l'image KLV
-    klv_path = os.path.join(IMAGE_DIR, "img" + klv_filename)
+    #klv_path = os.path.join(IMAGE_DIR, "img" + klv_filename)
+    klv_path = klv_filename
     klv_img = cv2.imread(klv_path)
     if klv_img is None:
         cv2.imshow("SyncView", video_frame)
         cv2.waitKey(1)
         return False
 
-    # Redimensionnement de l'image KLV pour la même hauteur que la vidéo
-    h_vid, w_vid = video_frame.shape[:2]
+    h_vid, _ = video_frame.shape[:2]
     h_klv, w_klv = klv_img.shape[:2]
     if h_klv != h_vid:
         scale = h_vid / h_klv
         new_w = int(w_klv * scale)
         klv_img = cv2.resize(klv_img, (new_w, h_vid), interpolation=cv2.INTER_AREA)
 
-    # Concatenation horizontale
     combined = np.hstack((video_frame, klv_img))
     cv2.imshow("SyncView", combined)
     cv2.waitKey(1)
@@ -88,9 +85,7 @@ def on_new_klv_sample(sink):
     global last_meta_filename
     sample = sink.emit("pull-sample")
     buf = sample.get_buffer()
-    pts = buf.pts
-    pts_s = pts / Gst.SECOND if pts != Gst.CLOCK_TIME_NONE else -1
-
+    pts_s = buf.pts / Gst.SECOND if buf.pts != Gst.CLOCK_TIME_NONE else -1
     msg, err = parse_klv(buf)
     if msg and msg.filename != last_meta_filename:
         last_meta_filename = msg.filename
@@ -104,33 +99,27 @@ def on_new_klv_sample(sink):
 def on_new_video_sample(sink):
     sample = sink.emit('pull-sample')
     buf = sample.get_buffer()
-    pts = buf.pts
-    pts_s = pts / Gst.SECOND if pts != Gst.CLOCK_TIME_NONE else -1
+    pts_s = buf.pts / Gst.SECOND if buf.pts != Gst.CLOCK_TIME_NONE else -1
     print(f"Video @ {pts_s:.3f}s")
 
-    # Extraction de la frame vidéo
     result, mapinfo = buf.map(Gst.MapFlags.READ)
     if not result:
         return Gst.FlowReturn.OK
     caps = sample.get_caps()
     s = caps.get_structure(0)
-    w = s.get_value('width')
-    h = s.get_value('height')
+    w, h = s.get_value('width'), s.get_value('height')
     video_data = np.ndarray((h, w, 3), dtype=np.uint8, buffer=mapinfo.data)
     video_bgr = cv2.cvtColor(video_data, cv2.COLOR_RGB2BGR)
     buf.unmap(mapinfo)
 
-    # Synchronisation: recherche de la méta la plus proche
+    klv_filename = None
     if meta_buffer:
-        closest_pts, filename = min(meta_buffer, key=lambda x: abs(x[0] - pts_s))
+        closest_pts, fname = min(meta_buffer, key=lambda x: abs(x[0] - pts_s))
         if abs(closest_pts - pts_s) < TOLERANCE:
-            print(f"  → Sync match: méta {closest_pts:.3f}s → {filename}")
-            GLib.idle_add(display_side_by_side, video_bgr, filename)
-        else:
-            GLib.idle_add(display_side_by_side, video_bgr, None)
-    else:
-        GLib.idle_add(display_side_by_side, video_bgr, None)
+            klv_filename = fname
+            print(f"  → Sync match: méta {closest_pts:.3f}s → {fname}")
 
+    GLib.idle_add(display_side_by_side, video_bgr, klv_filename)
     return Gst.FlowReturn.OK
 
 
@@ -149,43 +138,47 @@ def on_message(bus, message, loop):
 def main():
     Gst.init(None)
 
-    # Horloge unique
+    # Créer et partager une horloge
     clock = Gst.SystemClock.obtain()
+    start_time = clock.get_time()
 
-    # Pipeline unique KLV + vidéo
-    pipeline = Gst.parse_launch(
-        f"srtsrc latency=1000 uri={SRC_URI} name=srtsrc "
-        "srtsrc. ! queue ! application/x-rtp,media=video,clock-rate=90000,encoding-name=JPEG,payload=26 "
-        "! rtpjpegdepay ! nvjpegdec ! videoconvert ! video/x-raw,format=RGB "
-        "! queue ! appsink name=video_sink emit-signals=true sync=true "
+    # Pipeline KLV
+    meta_pipeline = Gst.parse_launch(
         f"tcpclientsrc host={TCP_HOST} port={TCP_PORT} ! queue ! tsdemux name=dmx "
         "dmx. ! queue ! meta/x-klv ! queue ! appsink name=klv_sink emit-signals=true drop=true sync=true"
     )
-    pipeline.use_clock(clock)
-    start_time = clock.get_time()
-    pipeline.set_base_time(start_time)
-
-    # Connexion des callbacks
-    video_sink = pipeline.get_by_name('video_sink')
-    video_sink.connect('new-sample', on_new_video_sample)
-    klv_sink = pipeline.get_by_name('klv_sink')
+    meta_pipeline.use_clock(clock)
+    meta_pipeline.set_base_time(start_time)
+    klv_sink = meta_pipeline.get_by_name('klv_sink')
     klv_sink.connect('new-sample', on_new_klv_sample)
 
-    # Bus et boucle
-    loop = GLib.MainLoop()
-    bus = pipeline.get_bus()
-    bus.add_signal_watch()
-    bus.connect('message', lambda b, m: on_message(b, m, loop))
+    # Pipeline Vidéo SRT
+    video_pipeline = Gst.parse_launch(
+        f"srtsrc latency=1000 uri={SRC_URI} ! queue ! application/x-rtp,media=video,clock-rate=90000,encoding-name=JPEG,payload=26 "
+        "! rtpjpegdepay ! nvjpegdec ! videoconvert ! video/x-raw,format=RGB "
+        "! queue ! appsink name=video_sink emit-signals=true sync=true"
+    )
+    video_pipeline.use_clock(clock)
+    video_pipeline.set_base_time(start_time)
+    video_sink = video_pipeline.get_by_name('video_sink')
+    video_sink.connect('new-sample', on_new_video_sample)
 
-    # Démarrage
-    pipeline.set_state(Gst.State.PLAYING)
+    # Boucle principale et bus
+    loop = GLib.MainLoop()
+    for pipe in (meta_pipeline, video_pipeline):
+        bus = pipe.get_bus()
+        bus.add_signal_watch()
+        bus.connect('message', lambda b, m: on_message(b, m, loop))
+        pipe.set_state(Gst.State.PLAYING)
+
     print(f"Streaming vidéo sur {SRC_URI} et KLV sur tcp://{TCP_HOST}:{TCP_PORT}")
     try:
         loop.run()
     except KeyboardInterrupt:
         print("Interrompu par l'utilisateur")
     finally:
-        pipeline.set_state(Gst.State.NULL)
+        meta_pipeline.set_state(Gst.State.NULL)
+        video_pipeline.set_state(Gst.State.NULL)
 
 if __name__ == "__main__":
     main()
