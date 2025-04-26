@@ -20,7 +20,7 @@ from gi.repository import Gst, GLib
 IMAGE_DIR_RIGHT     = "/home/smith/dataset/sequences/00/image_0/jpgs_numbered"
 IMAGE_DIR_LEFT      = "/home/smith/dataset/sequences/00/image_1/jpgs_numbered"
 PATTERN             = "%05d.jpg"
-FPS                 = 8
+FPS                 = 4
 VIDEO_SRT_URI_LEFT  = "srt://127.0.0.1:6020?mode=caller"
 VIDEO_SRT_URI_RIGHT = "srt://127.0.0.1:6021?mode=caller"
 TCP_HOST            = "127.0.0.1"
@@ -185,7 +185,30 @@ class SRTSyncClient:
                     concat = np.hstack((left, right))
                     img_name = f"{reduced:.3f}_L_{entry['klv_left']}_R_{entry['klv_right']}.png".replace('/','_')
                     cv2.imwrite(os.path.join('save', img_name), concat)
+                    
+                    # display frame
+                    left_name = entry['klv_left'].split('/')[-1]
+                    right_name = entry['klv_right'].split('/')[-1]
+                    #window_name = f"SyncView | LEFT: {left_name} | RIGHT: {right_name}"
+                    #window_name = "SyncView "+left_name+" "+right_name
+                    #GLib.idle_add(self._display_concat_image, concat, window_name)
+                    GLib.idle_add(self._display_concat_image, concat, left_name, right_name)
+
                 del self.sync_buffer[reduced]
+
+    def _display_concat_image(self, img, left_name, right_name):
+        text = f"LEFT: {left_name}   |   RIGHT: {right_name}"
+        cv2.putText(img, text, (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 
+                    1, (0, 255, 0), 2, cv2.LINE_AA)
+        cv2.imshow("SyncView", img)
+        cv2.waitKey(1)
+        return False
+
+
+    # def _display_concat_image(self, img, window_name):
+    #     cv2.imshow(window_name, img)
+    #     cv2.waitKey(1)
+    #     return False  # Pour que GLib.idle_add ne relance pas la fonction
 
     def _on_message(self, bus, msg):
         if msg.type == Gst.MessageType.ERROR:

@@ -12,27 +12,19 @@ gi.require_version('Gst', '1.0')
 from gi.repository import Gst, GLib
 
 # --- Configuration ---
-# IMAGE_DIR_RIGHT     = "/home/ivm/escargot/imgs_right_numbered"
-# IMAGE_DIR_LEFT      = "/home/ivm/escargot/imgs_left_numbered"
-
 IMAGE_DIR_RIGHT     = "/home/smith/dataset/sequences/00/image_0/jpgs_numbered"
 IMAGE_DIR_LEFT      = "/home/smith/dataset/sequences/00/image_1/jpgs_numbered"
-
-
-#PATTERN             = "img%05d.jpg"
-
-
 PATTERN             = "%05d.jpg"
-
-FPS                 = 8
+FPS                 = 4
 VIDEO_SRT_URI_LEFT  = "srt://127.0.0.1:6020?mode=listener"
 VIDEO_SRT_URI_RIGHT = "srt://127.0.0.1:6021?mode=listener"
 TCP_HOST            = "127.0.0.1"
 TCP_PORT            = 7000
 
+# Initialize GStreamer and keys/indexes
+Gst.init(None)
 _key = hashlib.md5(b"StreamInfo").digest()
 frame_duration = Gst.SECOND // FPS
-
 video_indexes = {IMAGE_DIR_LEFT: 1, IMAGE_DIR_RIGHT: 1}
 meta_indexes  = {IMAGE_DIR_LEFT: 1, IMAGE_DIR_RIGHT: 1}
 
@@ -62,8 +54,7 @@ def make_meta_callback(image_dir):
         info.session_name = "Session Offline"
         payload = info.SerializeToString()
 
-        frame = bytearray(_key)
-        frame += struct.pack(">I", len(payload)) + payload
+        frame = bytearray(_key) + struct.pack(">I", len(payload)) + payload
         buf = Gst.Buffer.new_wrapped(frame)
         buf.pts = (idx - 1) * frame_duration
         buf.duration = frame_duration
@@ -82,36 +73,36 @@ def on_message(bus, message, loop):
         loop.quit()
 
 def main():
-    Gst.init(None)
-
-    # Pipeline unique
-    pipeline = Gst.parse_launch(
-        # --- Flux vidéo gauche ---
+    # Build pipeline
+    pipeline_desc = (
+        # Video left
         f"appsrc name=vid_left caps=\"image/jpeg,framerate={FPS}/1\" is-live=true block=true format=time ! "
         "decodebin ! videoconvert ! video/x-raw,format=I420 ! jpegenc ! rtpjpegpay mtu=1316 ! "
         f"srtserversink uri={VIDEO_SRT_URI_LEFT} "
-        # --- Flux vidéo droite ---
+
+        # Video right
         f"appsrc name=vid_right caps=\"image/jpeg,framerate={FPS}/1\" is-live=true block=true format=time ! "
         "decodebin ! videoconvert ! video/x-raw,format=I420 ! jpegenc ! rtpjpegpay mtu=1316 ! "
         f"srtserversink uri={VIDEO_SRT_URI_RIGHT} "
-        # --- Flux metadata combinés via mpegtsmux ---
-        f"appsrc name=klv_left caps=\"meta/x-klv,parsed=true,framerate={FPS}/1\" is-live=true block=true format=time ! queue ! "
-        f"mpegtsmux name=mux ! queue max-size-time=5000000000 ! tcpserversink host={TCP_HOST} port={TCP_PORT} sync=true "
-        f"appsrc name=klv_right caps=\"meta/x-klv,parsed=true,framerate={FPS}/1\" is-live=true block=true format=time ! queue ! mux."
+
+        # Metadata left with pacing by PTS
+        f"appsrc name=klv_left caps=\"meta/x-klv,parsed=true,framerate={FPS}/1\" is-live=true block=true format=time ! "
+        "queue ! mpegtsmux name=mux ! "
+        f"tcpserversink host={TCP_HOST} port={TCP_PORT} sync=true "
+
+        # Metadata right
+        f"appsrc name=klv_right caps=\"meta/x-klv,parsed=true,framerate={FPS}/1\" is-live=true block=true format=time ! "
+        "queue ! mux."
     )
+    pipeline = Gst.parse_launch(pipeline_desc)
 
-    # Récupération et connexion des callbacks
-    src_vid_left  = pipeline.get_by_name('vid_left')
-    src_vid_right = pipeline.get_by_name('vid_right')
-    src_meta_left = pipeline.get_by_name('klv_left')
-    src_meta_right= pipeline.get_by_name('klv_right')
+    # Connect callbacks
+    pipeline.get_by_name('vid_left').connect('need-data', on_need_data_video, IMAGE_DIR_LEFT)
+    pipeline.get_by_name('vid_right').connect('need-data', on_need_data_video, IMAGE_DIR_RIGHT)
+    pipeline.get_by_name('klv_left').connect('need-data', make_meta_callback(IMAGE_DIR_LEFT))
+    pipeline.get_by_name('klv_right').connect('need-data', make_meta_callback(IMAGE_DIR_RIGHT))
 
-    src_vid_left.connect('need-data', on_need_data_video, IMAGE_DIR_LEFT)
-    src_vid_right.connect('need-data', on_need_data_video, IMAGE_DIR_RIGHT)
-    src_meta_left.connect('need-data', make_meta_callback(IMAGE_DIR_LEFT))
-    src_meta_right.connect('need-data', make_meta_callback(IMAGE_DIR_RIGHT))
-
-    # Bus et boucle principale
+    # Bus and loop
     loop = GLib.MainLoop()
     bus = pipeline.get_bus()
     bus.add_signal_watch()
