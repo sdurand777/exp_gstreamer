@@ -1,0 +1,349 @@
+[INIT] Initializing SRTSyncClient
+[PROCESS] Sample processing thread started
+[PIPELINE] Launching pipeline:
+ srtsrc latency=1000 uri=srt://127.0.0.1:6020?mode=caller ! queue !application/x-rtp,media=video,encoding-name=JPEG,payload=26 ! rtpjpegdepay name=depay_l ! jpegparse ! tee name=tee_l tee_l. ! appsink name=vid_l caps="image/jpeg" emit-signals=true sync=false srtsrc latency=1000 uri=srt://127.0.0.1:6021?mode=caller ! queue !application/x-rtp,media=video,encoding-name=JPEG,payload=26 ! rtpjpegdepay name=depay_r ! jpegparse ! tee name=tee_r tee_r. ! appsink name=vid_r caps="image/jpeg" emit-signals=true sync=false tcpclientsrc host=127.0.0.1 port=7000 ! tsdemux name=dmx dmx. ! queue ! meta/x-klv,parsed=true ! appsink name=klv_l emit-signals=true sync=false drop=false dmx. ! queue ! meta/x-klv,parsed=true ! appsink name=klv_r emit-signals=true sync=false drop=false
+[PIPELINE] State set to PLAYING
+[RUN] Starting main loop
+[DEBUG][probe] PTS pré-GPU: 0.126s
+[DEBUG][probe] PTS pré-GPU: 0.128s
+[VIDEO] side=right, raw PTS=0.126s
+[META] side=left, raw PTS=0.125s
+[ALIGN] Initial offset=0.125s
+[VIDEO] side=left, raw PTS=0.128s
+[DEBUG][probe] PTS pré-GPU: 0.128s
+[META] side=right, raw PTS=0.125s
+[DEBUG][probe] PTS pré-GPU: 0.130s
+[VIDEO] side=right, raw PTS=0.128s
+[VIDEO] side=left, raw PTS=0.130s
+[DEBUG][probe] PTS pré-GPU: 0.129s
+[VIDEO] side=right, raw PTS=0.129s
+[DEBUG][probe] PTS pré-GPU: 0.131s
+[VIDEO] side=right, raw PTS=0.131s
+[DEBUG][probe] PTS pré-GPU: 0.131s
+[VIDEO] side=left, raw PTS=0.131s
+[DEBUG][probe] PTS pré-GPU: 0.132s
+[VIDEO] side=right, raw PTS=0.132s
+[DEBUG][probe] PTS pré-GPU: 0.133s
+[VIDEO] side=left, raw PTS=0.133s
+[DEBUG][probe] PTS pré-GPU: 0.134s
+[VIDEO] side=right, raw PTS=0.134s
+[DEBUG][probe] PTS pré-GPU: 0.135s
+[VIDEO] side=left, raw PTS=0.135s
+[DEBUG][probe] PTS pré-GPU: 0.136s
+[VIDEO] side=right, raw PTS=0.136s
+[DEBUG][probe] PTS pré-GPU: 0.136s
+[VIDEO] side=left, raw PTS=0.136s
+[DEBUG][probe] PTS pré-GPU: 0.137s
+[VIDEO] side=right, raw PTS=0.137s
+[DEBUG][probe] PTS pré-GPU: 0.138s
+[VIDEO] side=left, raw PTS=0.138s
+[DEBUG][probe] PTS pré-GPU: 0.139s
+[VIDEO] side=right, raw PTS=0.139s
+[DEBUG][probe] PTS pré-GPU: 0.140s
+[VIDEO] side=left, raw PTS=0.140s
+[DEBUG][probe] PTS pré-GPU: 0.140s
+[VIDEO] side=right, raw PTS=0.140s
+[DEBUG][probe] PTS pré-GPU: 0.141s
+[VIDEO] side=left, raw PTS=0.141s
+[DEBUG][probe] PTS pré-GPU: 0.142s
+[VIDEO] side=right, raw PTS=0.142s
+[DEBUG][probe] PTS pré-GPU: 0.143s
+[VIDEO] side=right, raw PTS=0.143s
+[DEBUG][probe] PTS pré-GPU: 0.143s
+[VIDEO] side=left, raw PTS=0.143s
+[DEBUG][probe] PTS pré-GPU: 0.145s
+[VIDEO] side=left, raw PTS=0.145s
+[DEBUG][probe] PTS pré-GPU: 0.145s
+[VIDEO] side=right, raw PTS=0.145s
+[DEBUG][probe] PTS pré-GPU: 0.147s
+[VIDEO] side=right, raw PTS=0.147s
+[DEBUG][probe] PTS pré-GPU: 0.146s
+[VIDEO] side=left, raw PTS=0.146s
+[DEBUG][probe] PTS pré-GPU: 0.148s
+[VIDEO] side=left, raw PTS=0.148s
+[DEBUG][probe] PTS pré-GPU: 0.148s
+[VIDEO] side=right, raw PTS=0.148s
+[DEBUG][probe] PTS pré-GPU: 0.150s
+[VIDEO] side=right, raw PTS=0.150s
+[DEBUG][probe] PTS pré-GPU: 0.150s
+[VIDEO] side=left, raw PTS=0.150s
+[DEBUG][probe] PTS pré-GPU: 0.151s
+[VIDEO] side=left, raw PTS=0.151s
+[DEBUG][probe] PTS pré-GPU: 0.153s
+[VIDEO] side=left, raw PTS=0.153s
+[DEBUG][probe] PTS pré-GPU: 0.183s
+[DEBUG][probe] PTS pré-GPU: 0.183s
+[VIDEO] side=left, raw PTS=0.183s
+[VIDEO] side=right, raw PTS=0.183s
+[META] side=left, raw PTS=0.375s
+[META] side=right, raw PTS=0.375s
+[DEBUG][probe] PTS pré-GPU: 0.433s
+[DEBUG][probe] PTS pré-GPU: 0.433s
+[VIDEO] side=left, raw PTS=0.433s
+[VIDEO] side=right, raw PTS=0.433s
+[META] side=left, raw PTS=0.625s
+[META] side=right, raw PTS=0.625s
+[DEBUG][probe] PTS pré-GPU: 0.683s
+[DEBUG][probe] PTS pré-GPU: 0.683s
+[VIDEO] side=right, raw PTS=0.683s
+[VIDEO] side=left, raw PTS=0.683s
+[META] side=left, raw PTS=0.875s
+[META] side=right, raw PTS=0.875s
+[DEBUG][probe] PTS pré-GPU: 0.933s
+[VIDEO] side=right, raw PTS=0.933s
+[DEBUG][probe] PTS pré-GPU: 0.933s
+[VIDEO] side=left, raw PTS=0.933s
+[META] side=left, raw PTS=1.125s
+[META] side=right, raw PTS=1.125s
+[DEBUG][probe] PTS pré-GPU: 1.183s
+[DEBUG][probe] PTS pré-GPU: 1.183s
+[VIDEO] side=right, raw PTS=1.183s
+[VIDEO] side=left, raw PTS=1.183s
+[META] side=left, raw PTS=1.375s
+[META] side=right, raw PTS=1.375s
+[DEBUG][probe] PTS pré-GPU: 1.433s
+[DEBUG][probe] PTS pré-GPU: 1.433s
+[VIDEO] side=left, raw PTS=1.433s
+[VIDEO] side=right, raw PTS=1.433s
+[META] side=right, raw PTS=1.625s
+[META] side=left, raw PTS=1.625s
+[DEBUG][probe] PTS pré-GPU: 1.683s
+[DEBUG][probe] PTS pré-GPU: 1.683s
+[VIDEO] side=right, raw PTS=1.683s
+[VIDEO] side=left, raw PTS=1.683s
+[META] side=left, raw PTS=1.875s
+[META] side=right, raw PTS=1.875s
+[DEBUG][probe] PTS pré-GPU: 1.933s
+[DEBUG][probe] PTS pré-GPU: 1.933s
+[VIDEO] side=right, raw PTS=1.933s
+[VIDEO] side=left, raw PTS=1.933s
+[META] side=right, raw PTS=2.125s
+[META] side=left, raw PTS=2.125s
+[DEBUG][probe] PTS pré-GPU: 2.183s
+[VIDEO] side=left, raw PTS=2.183s
+[DEBUG][probe] PTS pré-GPU: 2.183s
+[VIDEO] side=right, raw PTS=2.183s
+[META] side=left, raw PTS=2.375s
+[META] side=right, raw PTS=2.375s
+[DEBUG][probe] PTS pré-GPU: 2.433s
+[DEBUG][probe] PTS pré-GPU: 2.433s
+[VIDEO] side=right, raw PTS=2.433s
+[VIDEO] side=left, raw PTS=2.433s
+[META] side=left, raw PTS=2.625s
+[META] side=right, raw PTS=2.625s
+[DEBUG][probe] PTS pré-GPU: 2.683s
+[VIDEO] side=left, raw PTS=2.683s
+[DEBUG][probe] PTS pré-GPU: 2.683s
+[VIDEO] side=right, raw PTS=2.683s
+[META] side=left, raw PTS=2.875s
+[META] side=right, raw PTS=2.875s
+[DEBUG][probe] PTS pré-GPU: 2.933s
+[VIDEO] side=left, raw PTS=2.933s
+[DEBUG][probe] PTS pré-GPU: 2.933s
+[VIDEO] side=right, raw PTS=2.933s
+[META] side=left, raw PTS=3.125s
+[META] start_pts initialized to 3.125s
+[META] side=left, aligned PTS=3.000s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00029.jpg
+[META] side=right, raw PTS=3.125s
+[META] side=right, aligned PTS=3.000s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00029.jpg
+[DEBUG][probe] PTS pré-GPU: 3.183s
+[DEBUG][probe] PTS pré-GPU: 3.183s
+[VIDEO] side=left, raw PTS=3.183s
+[VIDEO] side=right, raw PTS=3.183s
+[VIDEO] side=right, aligned PTS=3.000s
+[VIDEO] side=left, aligned PTS=3.000s
+[SYNC] f_pts=(3.183,3.183) k_pts=(3.125,3.125) dt=0.058s
+[META] side=left, raw PTS=3.375s
+[META] side=left, aligned PTS=3.250s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00030.jpg
+[META] side=right, raw PTS=3.375s
+[META] side=right, aligned PTS=3.250s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00030.jpg
+[DEBUG][probe] PTS pré-GPU: 3.433s
+[DEBUG][probe] PTS pré-GPU: 3.433s
+[VIDEO] side=left, raw PTS=3.433s
+[VIDEO] side=right, raw PTS=3.433s
+[VIDEO] side=left, aligned PTS=3.250s
+[VIDEO] side=right, aligned PTS=3.250s
+[SYNC] f_pts=(3.433,3.433) k_pts=(3.375,3.375) dt=0.058s
+[META] side=left, raw PTS=3.625s
+[META] side=left, aligned PTS=3.500s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00031.jpg
+[META] side=right, raw PTS=3.625s
+[META] side=right, aligned PTS=3.500s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00031.jpg
+[DEBUG][probe] PTS pré-GPU: 3.683s
+[DEBUG][probe] PTS pré-GPU: 3.683s
+[VIDEO] side=left, raw PTS=3.683s
+[VIDEO] side=right, raw PTS=3.683s
+[VIDEO] side=left, aligned PTS=3.500s
+[VIDEO] side=right, aligned PTS=3.500s
+[SYNC] f_pts=(3.683,3.683) k_pts=(3.625,3.625) dt=0.058s
+[META] side=right, raw PTS=3.875s
+[META] side=right, aligned PTS=3.750s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00032.jpg
+[META] side=left, raw PTS=3.875s
+[META] side=left, aligned PTS=3.750s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00032.jpg
+[DEBUG][probe] PTS pré-GPU: 3.933s
+[DEBUG][probe] PTS pré-GPU: 3.933s
+[VIDEO] side=right, raw PTS=3.933s
+[VIDEO] side=left, raw PTS=3.933s
+[VIDEO] side=right, aligned PTS=3.750s
+[VIDEO] side=left, aligned PTS=3.750s
+[SYNC] f_pts=(3.933,3.933) k_pts=(3.875,3.875) dt=0.058s
+[META] side=left, raw PTS=4.125s
+[META] side=left, aligned PTS=4.000s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00033.jpg
+[META] side=right, raw PTS=4.125s
+[META] side=right, aligned PTS=4.000s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00033.jpg
+[DEBUG][probe] PTS pré-GPU: 4.183s
+[DEBUG][probe] PTS pré-GPU: 4.183s
+[VIDEO] side=right, raw PTS=4.183s
+[VIDEO] side=left, raw PTS=4.183s
+[VIDEO] side=right, aligned PTS=4.000s
+[VIDEO] side=left, aligned PTS=4.000s
+[SYNC] f_pts=(4.183,4.183) k_pts=(4.125,4.125) dt=0.058s
+[META] side=left, raw PTS=4.375s
+[META] side=left, aligned PTS=4.250s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00034.jpg
+[META] side=right, raw PTS=4.375s
+[META] side=right, aligned PTS=4.250s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00034.jpg
+[DEBUG][probe] PTS pré-GPU: 4.433s
+[VIDEO] side=right, raw PTS=4.433s
+[DEBUG][probe] PTS pré-GPU: 4.433s
+[VIDEO] side=left, raw PTS=4.433s
+[VIDEO] side=right, aligned PTS=4.250s
+[VIDEO] side=left, aligned PTS=4.250s
+[SYNC] f_pts=(4.433,4.433) k_pts=(4.375,4.375) dt=0.058s
+[META] side=right, raw PTS=4.625s
+[META] side=right, aligned PTS=4.500s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00035.jpg
+[META] side=left, raw PTS=4.625s
+[META] side=left, aligned PTS=4.500s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00035.jpg
+[DEBUG][probe] PTS pré-GPU: 4.683s
+[VIDEO] side=left, raw PTS=4.683s
+[VIDEO] side=left, aligned PTS=4.500s
+[DEBUG][probe] PTS pré-GPU: 4.683s
+[VIDEO] side=right, raw PTS=4.683s
+[VIDEO] side=right, aligned PTS=4.500s
+[SYNC] f_pts=(4.683,4.683) k_pts=(4.625,4.625) dt=0.058s
+[META] side=right, raw PTS=4.875s
+[META] side=right, aligned PTS=4.750s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00036.jpg
+[META] side=left, raw PTS=4.875s
+[META] side=left, aligned PTS=4.750s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00036.jpg
+[DEBUG][probe] PTS pré-GPU: 4.933s
+[DEBUG][probe] PTS pré-GPU: 4.933s
+[VIDEO] side=right, raw PTS=4.933s
+[VIDEO] side=left, raw PTS=4.933s
+[VIDEO] side=right, aligned PTS=4.750s
+[VIDEO] side=left, aligned PTS=4.750s
+[SYNC] f_pts=(4.933,4.933) k_pts=(4.875,4.875) dt=0.058s
+[META] side=left, raw PTS=5.125s
+[META] side=left, aligned PTS=5.000s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00037.jpg
+[META] side=right, raw PTS=5.125s
+[META] side=right, aligned PTS=5.000s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00037.jpg
+[DEBUG][probe] PTS pré-GPU: 5.183s
+[VIDEO] side=right, raw PTS=5.183s
+[VIDEO] side=right, aligned PTS=5.000s
+[DEBUG][probe] PTS pré-GPU: 5.183s
+[VIDEO] side=left, raw PTS=5.183s
+[VIDEO] side=left, aligned PTS=5.000s
+[SYNC] f_pts=(5.183,5.183) k_pts=(5.125,5.125) dt=0.058s
+[META] side=left, raw PTS=5.375s
+[META] side=left, aligned PTS=5.250s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00038.jpg
+[META] side=right, raw PTS=5.375s
+[META] side=right, aligned PTS=5.250s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00038.jpg
+[DEBUG][probe] PTS pré-GPU: 5.433s
+[DEBUG][probe] PTS pré-GPU: 5.433s
+[VIDEO] side=right, raw PTS=5.433s
+[VIDEO] side=left, raw PTS=5.433s
+[VIDEO] side=right, aligned PTS=5.250s
+[VIDEO] side=left, aligned PTS=5.250s
+[SYNC] f_pts=(5.433,5.433) k_pts=(5.375,5.375) dt=0.058s
+[META] side=right, raw PTS=5.625s
+[META] side=right, aligned PTS=5.500s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00039.jpg
+[META] side=left, raw PTS=5.625s
+[META] side=left, aligned PTS=5.500s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00039.jpg
+[DEBUG][probe] PTS pré-GPU: 5.683s
+[DEBUG][probe] PTS pré-GPU: 5.683s
+[VIDEO] side=left, raw PTS=5.683s
+[VIDEO] side=right, raw PTS=5.683s
+[VIDEO] side=left, aligned PTS=5.500s
+[VIDEO] side=right, aligned PTS=5.500s
+[SYNC] f_pts=(5.683,5.683) k_pts=(5.625,5.625) dt=0.058s
+[META] side=right, raw PTS=5.875s
+[META] side=right, aligned PTS=5.750s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00040.jpg
+[META] side=left, raw PTS=5.875s
+[META] side=left, aligned PTS=5.750s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00040.jpg
+[DEBUG][probe] PTS pré-GPU: 5.933s
+[DEBUG][probe] PTS pré-GPU: 5.933s
+[VIDEO] side=right, raw PTS=5.933s
+[VIDEO] side=left, raw PTS=5.933s
+[VIDEO] side=right, aligned PTS=5.750s
+[VIDEO] side=left, aligned PTS=5.750s
+[SYNC] f_pts=(5.933,5.933) k_pts=(5.875,5.875) dt=0.058s
+[META] side=left, raw PTS=6.125s
+[META] side=left, aligned PTS=6.000s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00041.jpg
+[META] side=right, raw PTS=6.125s
+[META] side=right, aligned PTS=6.000s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00041.jpg
+[DEBUG][probe] PTS pré-GPU: 6.183s
+[DEBUG][probe] PTS pré-GPU: 6.183s
+[VIDEO] side=left, raw PTS=6.183s
+[VIDEO] side=right, raw PTS=6.183s
+[VIDEO] side=left, aligned PTS=6.000s
+[VIDEO] side=right, aligned PTS=6.000s
+[SYNC] f_pts=(6.183,6.183) k_pts=(6.125,6.125) dt=0.058s
+[META] side=right, raw PTS=6.375s
+[META] side=right, aligned PTS=6.250s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00042.jpg
+[META] side=left, raw PTS=6.375s
+[META] side=left, aligned PTS=6.250s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00042.jpg
+[DEBUG][probe] PTS pré-GPU: 6.433s
+[DEBUG][probe] PTS pré-GPU: 6.433s
+[VIDEO] side=left, raw PTS=6.433s
+[VIDEO] side=right, raw PTS=6.433s
+[VIDEO] side=left, aligned PTS=6.250s
+[VIDEO] side=right, aligned PTS=6.250s
+[SYNC] f_pts=(6.433,6.433) k_pts=(6.375,6.375) dt=0.058s
+[META] side=left, raw PTS=6.625s
+[META] side=left, aligned PTS=6.500s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00043.jpg
+[META] side=right, raw PTS=6.625s
+[META] side=right, aligned PTS=6.500s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00043.jpg
+[DEBUG][probe] PTS pré-GPU: 6.683s
+[DEBUG][probe] PTS pré-GPU: 6.683s
+[VIDEO] side=left, raw PTS=6.683s
+[VIDEO] side=right, raw PTS=6.683s
+[VIDEO] side=left, aligned PTS=6.500s
+[VIDEO] side=right, aligned PTS=6.500s
+[SYNC] f_pts=(6.683,6.683) k_pts=(6.625,6.625) dt=0.058s
+[META] side=left, raw PTS=6.875s
+[META] side=left, aligned PTS=6.750s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00044.jpg
+[META] side=right, raw PTS=6.875s
+[META] side=right, aligned PTS=6.750s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00044.jpg
+[DEBUG][probe] PTS pré-GPU: 6.933s
+[VIDEO] side=right, raw PTS=6.933s
+[VIDEO] side=right, aligned PTS=6.750s
+[DEBUG][probe] PTS pré-GPU: 6.933s
+[VIDEO] side=left, raw PTS=6.933s
+[VIDEO] side=left, aligned PTS=6.750s
+[SYNC] f_pts=(6.933,6.933) k_pts=(6.875,6.875) dt=0.058s
+[META] side=left, raw PTS=7.125s
+[META] side=left, aligned PTS=7.000s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00045.jpg
+[META] side=right, raw PTS=7.125s
+[META] side=right, aligned PTS=7.000s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00045.jpg
+[DEBUG][probe] PTS pré-GPU: 7.183s
+[DEBUG][probe] PTS pré-GPU: 7.183s
+[VIDEO] side=right, raw PTS=7.183s
+[VIDEO] side=left, raw PTS=7.183s
+[VIDEO] side=right, aligned PTS=7.000s
+[VIDEO] side=left, aligned PTS=7.000s
+[SYNC] f_pts=(7.183,7.183) k_pts=(7.125,7.125) dt=0.058s
+[META] side=right, raw PTS=7.375s
+[META] side=right, aligned PTS=7.250s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00046.jpg
+[META] side=left, raw PTS=7.375s
+[META] side=left, aligned PTS=7.250s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00046.jpg
+[DEBUG][probe] PTS pré-GPU: 7.433s
+[VIDEO] side=left, raw PTS=7.433s
+[VIDEO] side=left, aligned PTS=7.250s
+[DEBUG][probe] PTS pré-GPU: 7.433s
+[VIDEO] side=right, raw PTS=7.433s
+[VIDEO] side=right, aligned PTS=7.250s
+[SYNC] f_pts=(7.433,7.433) k_pts=(7.375,7.375) dt=0.058s
+[META] side=left, raw PTS=7.625s
+[META] side=left, aligned PTS=7.500s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00047.jpg
+[META] side=right, raw PTS=7.625s
+[META] side=right, aligned PTS=7.500s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00047.jpg
+[DEBUG][probe] PTS pré-GPU: 7.683s
+[DEBUG][probe] PTS pré-GPU: 7.683s
+[VIDEO] side=left, raw PTS=7.683s
