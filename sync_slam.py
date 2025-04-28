@@ -17,17 +17,27 @@ gi.require_version('Gst', '1.0')
 from gi.repository import Gst, GLib
 
 # --- Configuration ---
-IMAGE_DIR_RIGHT     = "/home/smith/dataset/sequences/00/image_0/jpgs_numbered"
-IMAGE_DIR_LEFT      = "/home/smith/dataset/sequences/00/image_1/jpgs_numbered"
-PATTERN             = "%05d.jpg"
+# IMAGE_DIR_RIGHT     = "/home/smith/dataset/sequences/00/image_0/jpgs_numbered"
+# IMAGE_DIR_LEFT      = "/home/smith/dataset/sequences/00/image_1/jpgs_numbered"
+
+# SLAM config
+IMAGE_DIR_RIGHT = "/home/ivm/escargot/imgs_right_numbered"
+IMAGE_DIR_LEFT = "/home/ivm/escargot/imgs_left_numbered"
+
+#PATTERN             = "%05d.jpg"
+
+# SLAM config
+PATTERN             = "img%05d.jpg"
+
 FPS                 = 4
+
 VIDEO_SRT_URI_LEFT  = "srt://127.0.0.1:6020?mode=caller"
 VIDEO_SRT_URI_RIGHT = "srt://127.0.0.1:6021?mode=caller"
 TCP_HOST            = "127.0.0.1"
 TCP_PORT            = 7000
 
 # SKIP first seconds to align the data
-SKIP = 3
+SKIP = 10
 
 
 # Initialize GStreamer and keys/indexes
@@ -67,6 +77,9 @@ class SRTSyncClient:
             "demux. ! queue ! meta/x-klv,parsed=true ! appsink name=klv_left emit-signals=true sync=false drop=false "
             "demux. ! queue ! meta/x-klv,parsed=true ! appsink name=klv_right emit-signals=true sync=false drop=false"
         )
+
+        print("klv pipeline : ", desc)
+
         self.meta_pipe = Gst.parse_launch(desc)
         self.meta_pipe.get_by_name('klv_left').connect('new-sample',  self._on_meta('left'))
         self.meta_pipe.get_by_name('klv_right').connect('new-sample', self._on_meta('right'))
@@ -76,11 +89,25 @@ class SRTSyncClient:
         self.meta_pipe.set_state(Gst.State.PLAYING)
 
     def _build_video_pipeline(self, side, uri):
+
+        # on peut mettre sync true ou sync false drop false ca change rien
+
+        # desc = (
+        #     f"srtsrc latency=1000 uri={uri} ! queue ! "
+        #     "application/x-rtp,media=video,encoding-name=JPEG,payload=26 ! rtpjpegdepay ! jpegparse ! "
+        #     f"appsink name=vid_{side} caps=\"image/jpeg\" emit-signals=true sync=true"
+        # )
+
+
         desc = (
             f"srtsrc latency=1000 uri={uri} ! queue ! "
-            "application/x-rtp,media=video,encoding-name=JPEG,payload=26 ! rtpjpegdepay ! jpegparse ! "
-            f"appsink name=vid_{side} caps=\"image/jpeg\" emit-signals=true sync=false drop=false"
+            "application/x-rtp,media=video,encoding-name=JPEG,payload=26 ! rtpjpegdepay ! nvjpegdec ! videoconvert ! video/x-raw,format=RGB ! "
+            f"appsink name=vid_{side} emit-signals=true sync=true"
         )
+
+
+        print("srt pipeline "+side+" : ", desc)
+
         pipe = Gst.parse_launch(desc)
         pipe.get_by_name(f'vid_{side}').connect('new-sample', self._on_video(side))
         bus = pipe.get_bus()
@@ -89,11 +116,16 @@ class SRTSyncClient:
         pipe.set_state(Gst.State.PLAYING)
         self.video_pipes[side] = pipe
 
+
+
     def _on_meta(self, side):
         def handler(sink):
             sample = sink.emit('pull-sample')
             buf = sample.get_buffer()
             pts = buf.pts / Gst.SECOND if buf.pts != Gst.CLOCK_TIME_NONE else -1
+
+            #print("pts meta : ", pts)
+
             # skip first 2 secs
             if pts <= SKIP:
                 return Gst.FlowReturn.OK
@@ -101,6 +133,7 @@ class SRTSyncClient:
             # skip meta until first video arrives
             if self.start_pts_video is None or pts < self.start_pts_video:
                 return Gst.FlowReturn.OK
+
             ok, info = buf.map(Gst.MapFlags.READ)
             fname = None
             if ok:
@@ -121,6 +154,8 @@ class SRTSyncClient:
             return Gst.FlowReturn.OK
         return handler
 
+
+
     def _on_video(self, side):
         def handler(sink):
             sample = sink.emit('pull-sample')
@@ -136,14 +171,37 @@ class SRTSyncClient:
             ok, info = buf.map(Gst.MapFlags.READ)
             frame_img = None
             if ok:
-                data = info.data
-                buf.unmap(info)
-                np_arr = np.frombuffer(data, dtype=np.uint8)
-                frame_img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+
+                # # version cpu avec jpegparse
+                # data = info.data
+                # buf.unmap(info)
+                # np_arr = np.frombuffer(data, dtype=np.uint8)
+                # frame_img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+
+                # 3. Récupère les dimensions depuis les caps
+                caps = sample.get_caps()
+                structure = caps.get_structure(0)
+                width = structure.get_value('width')
+                height = structure.get_value('height')
+                # (on suppose ici un format RGB à 3 canaux)
+
+                # 4. Crée un array NumPy pointant vers les données brutes
+                frame_rgb = np.ndarray(
+                    shape=(height, width, 3),
+                    dtype=np.uint8,
+                    buffer=info.data
+                )
+
+                # 5. Convertit en BGR pour OpenCV
+                frame_img = cv2.cvtColor(frame_rgb, cv2.COLOR_RGB2BGR)
+
+
             reduced = self._calc_reduced_pts(pts)
             self.sample_queue.put(('frame', side, frame_img, pts, reduced))
             return Gst.FlowReturn.OK
         return handler
+
+
 
     def _calc_reduced_pts(self, pts_time):
         if pts_time < 0:
@@ -157,6 +215,8 @@ class SRTSyncClient:
             self.global_offset = 0.8 * self.global_offset + 0.2 * new_offset
         aligned = pts_time - self.global_offset
         return round(aligned / self.pts_precision) * self.pts_precision
+
+
 
     def _process_samples(self):
         while self.running:
@@ -203,7 +263,6 @@ class SRTSyncClient:
         cv2.imshow("SyncView", img)
         cv2.waitKey(1)
         return False
-
 
     # def _display_concat_image(self, img, window_name):
     #     cv2.imshow(window_name, img)

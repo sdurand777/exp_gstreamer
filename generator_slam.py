@@ -12,10 +12,20 @@ gi.require_version('Gst', '1.0')
 from gi.repository import Gst, GLib
 
 # --- Configuration ---
-IMAGE_DIR_RIGHT     = "/home/smith/dataset/sequences/00/image_0/jpgs_numbered"
-IMAGE_DIR_LEFT      = "/home/smith/dataset/sequences/00/image_1/jpgs_numbered"
+# IMAGE_DIR_RIGHT     = "/home/smith/dataset/sequences/00/image_0/jpgs_numbered"
+# IMAGE_DIR_LEFT      = "/home/smith/dataset/sequences/00/image_1/jpgs_numbered"
+
+# SLAM config
+IMAGE_DIR_RIGHT = "/home/ivm/escargot/imgs_right_numbered"
+IMAGE_DIR_LEFT = "/home/ivm/escargot/imgs_left_numbered"
+
 PATTERN             = "%05d.jpg"
+
+# SLAM config
+PATTERN             = "img%05d.jpg"
+
 FPS                 = 4
+
 VIDEO_SRT_URI_LEFT  = "srt://127.0.0.1:6020?mode=listener"
 VIDEO_SRT_URI_RIGHT = "srt://127.0.0.1:6021?mode=listener"
 TCP_HOST            = "127.0.0.1"
@@ -94,6 +104,10 @@ def main():
         f"appsrc name=klv_right caps=\"meta/x-klv,parsed=true,framerate={FPS}/1\" is-live=true block=true format=time ! "
         "queue ! mux."
     )
+
+    print("generator pipeline : ", pipeline_desc)
+
+
     pipeline = Gst.parse_launch(pipeline_desc)
 
     # Connect callbacks
