@@ -119,7 +119,7 @@ class SRTSyncClient:
         if self.start_pts is None and buf.pts != Gst.CLOCK_TIME_NONE:
             self.start_pts = pts
             print(f"[META] start_pts initialized to {self.start_pts:.3f}s")
-            return Gst.FlowReturn.OK
+            #return Gst.FlowReturn.OK
         ok, info = buf.map(Gst.MapFlags.READ)
         fname = None
         if ok:
@@ -174,8 +174,24 @@ class SRTSyncClient:
             down = int(pts / self.pts_precision) * self.pts_precision
             self.global_offset = pts - down
             print(f"[ALIGN] Initial offset={self.global_offset:.3f}s")
+
+        else:
+            # Update offset using running average (80% old, 20% new)
+            downsampled_pts = round((pts-self.global_offset) / self.pts_precision) * self.pts_precision
+            new_offset = pts - downsampled_pts
+            current_offset = self.global_offset
+
+            updated_offset = 0.8 * current_offset + 0.2* new_offset
+            print(f"Current offset: {current_offset} Updated offset: {updated_offset:.6f}s")
+            
+            # Only update if the change is significant
+            if abs(updated_offset - current_offset) > 0.01:
+                self.global_offset = updated_offset
+
         aligned = round((pts - self.global_offset) / self.pts_precision) * self.pts_precision
         return aligned
+
+
 
     def _process_samples(self):
         print("[PROCESS] Sample processing thread started")
@@ -185,29 +201,140 @@ class SRTSyncClient:
                 print(f"[QUEUE] Received {typ} {side}, raw PTS={pts:.3f}s, red={red:.3f}s")
             except queue.Empty:
                 continue
+
             with self.lock:
                 ent = self.sync_buffer[red]
-                print(f"[DEBUG] Bucket before insert red={red:.3f}s -> f_l={ent['f_l'] is not None}, f_r={ent['f_r'] is not None}, k_l={ent['k_l'] is not None}, k_r={ent['k_r'] is not None}")
-                key = f"{typ[0]}_{side[0]}"  # f=frame/k=klv, l=left/r=right
+
+                # --- affichage avant insertion ---
+                debug_parts = []
+                for name in ("f_l", "f_r", "k_l", "k_r"):
+                    pts_key = f"pts_{name}"
+                    if ent[name] is not None and ent.get(pts_key) is not None:
+                        debug_parts.append(f"{name}=True({ent[pts_key]:.3f}s)")
+                    else:
+                        debug_parts.append(f"{name}=False")
+                print(f"[DEBUG] avant insert red={red:.3f}s → " + ", ".join(debug_parts))
+
+                # Insérer la frame ou le KLV dans le bucket
+                key = f"{typ[0]}_{side[0]}"  # 'f'rame/'k'lv + 'l'eft/'r'ight
                 ent[key] = data
-                ent[f"pts_{typ[0]}_{side[0]}"] = pts
-                print(f"[DEBUG] Bucket after insert red={red:.3f}s -> f_l={ent['f_l'] is not None}, f_r={ent['f_r'] is not None}, k_l={ent['k_l'] is not None}, k_r={ent['k_r'] is not None}")
-                if all(ent.get(k) is not None for k in ('f_l','f_r','k_l','k_r')):
-                    print(f"[SYNC] red={red:.3f}s fl={ent['pts_f_l']:.3f}s fr={ent['pts_f_r']:.3f}s kl={ent['pts_k_l']:.3f}s kr={ent['pts_k_r']:.3f}s")
+                pts_key = f"pts_{typ[0]}_{side[0]}"
+                ent[pts_key] = pts
+
+                # --- affichage après insertion ---
+                debug_parts = []
+                for name in ("f_l", "f_r", "k_l", "k_r"):
+                    pts_key = f"pts_{name}"
+                    if ent[name] is not None and ent.get(pts_key) is not None:
+                        debug_parts.append(f"{name}=True({ent[pts_key]:.3f}s)")
+                    else:
+                        debug_parts.append(f"{name}=False")
+                print(f"[DEBUG] après insert red={red:.3f}s → " + ", ".join(debug_parts))
+
+                # Dès qu'on a les 4 (f_l, f_r, k_l, k_r), on synchronise
+                if all(ent.get(k) is not None for k in ('f_l', 'f_r', 'k_l', 'k_r')):
+                    # Affichage récapitulatif des PTS
+                    print(
+                        f"[SYNC] red={red:.3f}s  "
+                        f"fl={ent['pts_f_l']:.3f}s  fr={ent['pts_f_r']:.3f}s  "
+                        f"kl={ent['pts_k_l']:.3f}s  kr={ent['pts_k_r']:.3f}s"
+                    )
+
+                    # Concaténation des images gauche/droite
                     L, R = ent['f_l'], ent['f_r']
                     img = np.hstack((L, R))
 
-                    # draw KLV filenames on image
+                    # Annotation des noms de fichiers KLV
                     left_name = ent['k_l'].split('/')[-1] if isinstance(ent['k_l'], str) else ''
                     right_name = ent['k_r'].split('/')[-1] if isinstance(ent['k_r'], str) else ''
                     text = f"LEFT: {left_name}   |   RIGHT: {right_name}"
                     cv2.putText(img, text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
                                 1, (0, 255, 0), 2, cv2.LINE_AA)
 
+                    # Sauvegarde et affichage
                     name = f"{red:.3f}.png".replace('/', '_')
+                    os.makedirs('save', exist_ok=True)
                     cv2.imwrite(os.path.join('save', name), img)
                     GLib.idle_add(lambda: (cv2.imshow('Sync', img), cv2.waitKey(1)))
+
+                    # Nettoyage du bucket
                     del self.sync_buffer[red]
+
+
+
+    # def _process_samples(self):
+    #     print("[PROCESS] Sample processing thread started")
+    #     while self.running:
+    #         try:
+    #             typ, side, data, pts, red = self.sample_queue.get(timeout=0.1)
+    #             print(f"[QUEUE] Received {typ} {side}, raw PTS={pts:.3f}s, red={red:.3f}s")
+    #         except queue.Empty:
+    #             continue
+    #         with self.lock:
+    #             ent = self.sync_buffer[red]
+    #
+    #             # Construire dynamiquement l'affichage des flags + pts
+    #             debug_parts = []
+    #             for name in ("f_l", "f_r", "k_l", "k_r"):
+    #                 if ent[name] is not None:
+    #                     # case remplie → on affiche True et la valeur PTS
+    #                     debug_parts.append(f"{name}=True({pts:.3f}s)")
+    #                 else:
+    #                     debug_parts.append(f"{name}=False")
+    #
+    #             print(f"[DEBUG] Bucket before insert red={red:.3f}s -> " +
+    #                 ", ".join(debug_parts))
+    #
+    #             #print(f"[DEBUG] Bucket before insert red={red:.3f}s -> f_l={ent['f_l'] is not None}, f_r={ent['f_r'] is not None}, k_l={ent['k_l'] is not None}, k_r={ent['k_r'] is not None}")
+    #             
+    #             key = f"{typ[0]}_{side[0]}"  # f=frame/k=klv, l=left/r=right
+    #             ent[key] = data
+    #             ent[f"pts_{typ[0]}_{side[0]}"] = pts
+    #             #print(f"[DEBUG] Bucket after insert red={red:.3f}s -> f_l={ent['f_l'] is not None}, f_r={ent['f_r'] is not None}, k_l={ent['k_l'] is not None}, k_r={ent['k_r'] is not None}")
+    #
+    #             debug_parts = []
+    #             for name in ("f_l", "f_r", "k_l", "k_r"):
+    #                 if ent[name] is not None:
+    #                     # case remplie → on affiche True et la valeur PTS
+    #                     debug_parts.append(f"{name}=True({pts:.3f}s)")
+    #                 else:
+    #                     debug_parts.append(f"{name}=False")
+    #
+    #             print(f"[DEBUG] Bucket before insert red={red:.3f}s -> " +
+    #                 ", ".join(debug_parts))
+    #
+    #
+    #
+    #             if all(ent.get(k) is not None for k in ('f_l','f_r','k_l','k_r')):
+    #                 #print(f"[SYNC] red={red:.3f}s fl={ent['pts_f_l']:.3f}s fr={ent['pts_f_r']:.3f}s kl={ent['pts_k_l']:.3f}s kr={ent['pts_k_r']:.3f}s")
+    #
+    #                 debug_parts = []
+    #                 for name in ("f_l", "f_r", "k_l", "k_r"):
+    #                     if ent[name] is not None:
+    #                         # case remplie → on affiche True et la valeur PTS
+    #                         debug_parts.append(f"{name}=True({pts:.3f}s)")
+    #                     else:
+    #                         debug_parts.append(f"{name}=False")
+    #
+    #                 print(f"[SYNC] Bucket before insert red={red:.3f}s -> " +
+    #                     ", ".join(debug_parts))
+    #
+    #
+    #
+    #                 L, R = ent['f_l'], ent['f_r']
+    #                 img = np.hstack((L, R))
+    #
+    #                 # draw KLV filenames on image
+    #                 left_name = ent['k_l'].split('/')[-1] if isinstance(ent['k_l'], str) else ''
+    #                 right_name = ent['k_r'].split('/')[-1] if isinstance(ent['k_r'], str) else ''
+    #                 text = f"LEFT: {left_name}   |   RIGHT: {right_name}"
+    #                 cv2.putText(img, text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
+    #                             1, (0, 255, 0), 2, cv2.LINE_AA)
+    #
+    #                 name = f"{red:.3f}.png".replace('/', '_')
+    #                 cv2.imwrite(os.path.join('save', name), img)
+    #                 GLib.idle_add(lambda: (cv2.imshow('Sync', img), cv2.waitKey(1)))
+    #                 del self.sync_buffer[red]
 
     def _on_message(self, bus, msg):
         if msg.type == Gst.MessageType.ERROR:

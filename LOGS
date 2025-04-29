@@ -1,349 +1,1257 @@
 [INIT] Initializing SRTSyncClient
 [PROCESS] Sample processing thread started
 [PIPELINE] Launching pipeline:
- srtsrc latency=1000 uri=srt://127.0.0.1:6020?mode=caller ! queue !application/x-rtp,media=video,encoding-name=JPEG,payload=26 ! rtpjpegdepay name=depay_l ! jpegparse ! tee name=tee_l tee_l. ! appsink name=vid_l caps="image/jpeg" emit-signals=true sync=false srtsrc latency=1000 uri=srt://127.0.0.1:6021?mode=caller ! queue !application/x-rtp,media=video,encoding-name=JPEG,payload=26 ! rtpjpegdepay name=depay_r ! jpegparse ! tee name=tee_r tee_r. ! appsink name=vid_r caps="image/jpeg" emit-signals=true sync=false tcpclientsrc host=127.0.0.1 port=7000 ! tsdemux name=dmx dmx. ! queue ! meta/x-klv,parsed=true ! appsink name=klv_l emit-signals=true sync=false drop=false dmx. ! queue ! meta/x-klv,parsed=true ! appsink name=klv_r emit-signals=true sync=false drop=false
+ srtsrc latency=1000 uri=srt://127.0.0.1:6020?mode=caller ! queue !application/x-rtp,media=video,encoding-name=JPEG,payload=26 ! rtpjpegdepay name=depay_l ! nvjpegdec ! tee name=tee_l tee_l. ! queue max-size-buffers=1 leaky=downstream ! videoconvert ! video/x-raw,format=RGB ! appsink name=vid_l emit-signals=true sync=true tee_l. ! fakesink sync=false srtsrc latency=1000 uri=srt://127.0.0.1:6021?mode=caller ! queue !application/x-rtp,media=video,encoding-name=JPEG,payload=26 ! rtpjpegdepay name=depay_r ! nvjpegdec ! tee name=tee_r tee_r. ! queue max-size-buffers=1 leaky=downstream ! videoconvert ! video/x-raw,format=RGB ! appsink name=vid_r emit-signals=true sync=true tee_r. ! fakesink sync=false tcpclientsrc host=127.0.0.1 port=7000 ! tsdemux name=dmx dmx. ! queue ! meta/x-klv,parsed=true ! appsink name=klv_l emit-signals=true sync=false drop=false dmx. ! queue ! meta/x-klv,parsed=true ! appsink name=klv_r emit-signals=true sync=false drop=false
 [PIPELINE] State set to PLAYING
 [RUN] Starting main loop
-[DEBUG][probe] PTS pré-GPU: 0.126s
 [DEBUG][probe] PTS pré-GPU: 0.128s
-[VIDEO] side=right, raw PTS=0.126s
+[DEBUG][probe] PTS pré-GPU: 0.131s
 [META] side=left, raw PTS=0.125s
-[ALIGN] Initial offset=0.125s
-[VIDEO] side=left, raw PTS=0.128s
-[DEBUG][probe] PTS pré-GPU: 0.128s
-[META] side=right, raw PTS=0.125s
-[DEBUG][probe] PTS pré-GPU: 0.130s
-[VIDEO] side=right, raw PTS=0.128s
-[VIDEO] side=left, raw PTS=0.130s
 [DEBUG][probe] PTS pré-GPU: 0.129s
-[VIDEO] side=right, raw PTS=0.129s
-[DEBUG][probe] PTS pré-GPU: 0.131s
-[VIDEO] side=right, raw PTS=0.131s
-[DEBUG][probe] PTS pré-GPU: 0.131s
-[VIDEO] side=left, raw PTS=0.131s
 [DEBUG][probe] PTS pré-GPU: 0.132s
-[VIDEO] side=right, raw PTS=0.132s
+[META] side=right, raw PTS=0.125s
 [DEBUG][probe] PTS pré-GPU: 0.133s
-[VIDEO] side=left, raw PTS=0.133s
+[DEBUG][probe] PTS pré-GPU: 0.131s
 [DEBUG][probe] PTS pré-GPU: 0.134s
-[VIDEO] side=right, raw PTS=0.134s
+[DEBUG][probe] PTS pré-GPU: 0.132s
 [DEBUG][probe] PTS pré-GPU: 0.135s
-[VIDEO] side=left, raw PTS=0.135s
+[DEBUG][probe] PTS pré-GPU: 0.133s
 [DEBUG][probe] PTS pré-GPU: 0.136s
-[VIDEO] side=right, raw PTS=0.136s
-[DEBUG][probe] PTS pré-GPU: 0.136s
-[VIDEO] side=left, raw PTS=0.136s
+[DEBUG][probe] PTS pré-GPU: 0.135s
 [DEBUG][probe] PTS pré-GPU: 0.137s
-[VIDEO] side=right, raw PTS=0.137s
+[DEBUG][probe] PTS pré-GPU: 0.136s
 [DEBUG][probe] PTS pré-GPU: 0.138s
-[VIDEO] side=left, raw PTS=0.138s
+[DEBUG][probe] PTS pré-GPU: 0.137s
 [DEBUG][probe] PTS pré-GPU: 0.139s
-[VIDEO] side=right, raw PTS=0.139s
+[DEBUG][probe] PTS pré-GPU: 0.139s
 [DEBUG][probe] PTS pré-GPU: 0.140s
-[VIDEO] side=left, raw PTS=0.140s
 [DEBUG][probe] PTS pré-GPU: 0.140s
-[VIDEO] side=right, raw PTS=0.140s
 [DEBUG][probe] PTS pré-GPU: 0.141s
-[VIDEO] side=left, raw PTS=0.141s
+[DEBUG][probe] PTS pré-GPU: 0.141s
 [DEBUG][probe] PTS pré-GPU: 0.142s
-[VIDEO] side=right, raw PTS=0.142s
 [DEBUG][probe] PTS pré-GPU: 0.143s
-[VIDEO] side=right, raw PTS=0.143s
 [DEBUG][probe] PTS pré-GPU: 0.143s
-[VIDEO] side=left, raw PTS=0.143s
+[DEBUG][probe] PTS pré-GPU: 0.144s
 [DEBUG][probe] PTS pré-GPU: 0.145s
-[VIDEO] side=left, raw PTS=0.145s
-[DEBUG][probe] PTS pré-GPU: 0.145s
-[VIDEO] side=right, raw PTS=0.145s
-[DEBUG][probe] PTS pré-GPU: 0.147s
-[VIDEO] side=right, raw PTS=0.147s
 [DEBUG][probe] PTS pré-GPU: 0.146s
-[VIDEO] side=left, raw PTS=0.146s
+[DEBUG][probe] PTS pré-GPU: 0.146s
+[DEBUG][probe] PTS pré-GPU: 0.147s
+[DEBUG][probe] PTS pré-GPU: 0.147s
+[DEBUG][probe] PTS pré-GPU: 0.149s
 [DEBUG][probe] PTS pré-GPU: 0.148s
-[VIDEO] side=left, raw PTS=0.148s
-[DEBUG][probe] PTS pré-GPU: 0.148s
-[VIDEO] side=right, raw PTS=0.148s
 [DEBUG][probe] PTS pré-GPU: 0.150s
-[VIDEO] side=right, raw PTS=0.150s
-[DEBUG][probe] PTS pré-GPU: 0.150s
-[VIDEO] side=left, raw PTS=0.150s
-[DEBUG][probe] PTS pré-GPU: 0.151s
-[VIDEO] side=left, raw PTS=0.151s
-[DEBUG][probe] PTS pré-GPU: 0.153s
-[VIDEO] side=left, raw PTS=0.153s
-[DEBUG][probe] PTS pré-GPU: 0.183s
-[DEBUG][probe] PTS pré-GPU: 0.183s
-[VIDEO] side=left, raw PTS=0.183s
-[VIDEO] side=right, raw PTS=0.183s
-[META] side=left, raw PTS=0.375s
+[DEBUG][probe] PTS pré-GPU: 0.171s
+[DEBUG][probe] PTS pré-GPU: 0.171s
 [META] side=right, raw PTS=0.375s
-[DEBUG][probe] PTS pré-GPU: 0.433s
-[DEBUG][probe] PTS pré-GPU: 0.433s
-[VIDEO] side=left, raw PTS=0.433s
-[VIDEO] side=right, raw PTS=0.433s
-[META] side=left, raw PTS=0.625s
+[META] side=left, raw PTS=0.375s
+[VIDEO] side=right, raw PTS=0.128s
+[VIDEO] side=left, raw PTS=0.131s
+[VIDEO] side=left, raw PTS=0.171s
+[VIDEO] side=right, raw PTS=0.171s
+[DEBUG][probe] PTS pré-GPU: 0.421s
+[DEBUG][probe] PTS pré-GPU: 0.421s
 [META] side=right, raw PTS=0.625s
-[DEBUG][probe] PTS pré-GPU: 0.683s
-[DEBUG][probe] PTS pré-GPU: 0.683s
-[VIDEO] side=right, raw PTS=0.683s
-[VIDEO] side=left, raw PTS=0.683s
-[META] side=left, raw PTS=0.875s
+[META] side=left, raw PTS=0.625s
+[VIDEO] side=left, raw PTS=0.421s
+[VIDEO] side=right, raw PTS=0.421s
+[DEBUG][probe] PTS pré-GPU: 0.671s
+[DEBUG][probe] PTS pré-GPU: 0.671s
 [META] side=right, raw PTS=0.875s
-[DEBUG][probe] PTS pré-GPU: 0.933s
-[VIDEO] side=right, raw PTS=0.933s
-[DEBUG][probe] PTS pré-GPU: 0.933s
-[VIDEO] side=left, raw PTS=0.933s
-[META] side=left, raw PTS=1.125s
+[META] side=left, raw PTS=0.875s
+[VIDEO] side=left, raw PTS=0.671s
+[VIDEO] side=right, raw PTS=0.671s
+[DEBUG][probe] PTS pré-GPU: 0.921s
+[DEBUG][probe] PTS pré-GPU: 0.921s
 [META] side=right, raw PTS=1.125s
-[DEBUG][probe] PTS pré-GPU: 1.183s
-[DEBUG][probe] PTS pré-GPU: 1.183s
-[VIDEO] side=right, raw PTS=1.183s
-[VIDEO] side=left, raw PTS=1.183s
-[META] side=left, raw PTS=1.375s
+[META] side=left, raw PTS=1.125s
+[VIDEO] side=right, raw PTS=0.921s
+[VIDEO] side=left, raw PTS=0.921s
+[DEBUG][probe] PTS pré-GPU: 1.171s
+[DEBUG][probe] PTS pré-GPU: 1.171s
 [META] side=right, raw PTS=1.375s
-[DEBUG][probe] PTS pré-GPU: 1.433s
-[DEBUG][probe] PTS pré-GPU: 1.433s
-[VIDEO] side=left, raw PTS=1.433s
-[VIDEO] side=right, raw PTS=1.433s
-[META] side=right, raw PTS=1.625s
+[META] side=left, raw PTS=1.375s
+[VIDEO] side=right, raw PTS=1.171s
+[VIDEO] side=left, raw PTS=1.171s
+[DEBUG][probe] PTS pré-GPU: 1.421s
+[DEBUG][probe] PTS pré-GPU: 1.421s
 [META] side=left, raw PTS=1.625s
-[DEBUG][probe] PTS pré-GPU: 1.683s
-[DEBUG][probe] PTS pré-GPU: 1.683s
-[VIDEO] side=right, raw PTS=1.683s
-[VIDEO] side=left, raw PTS=1.683s
+[META] side=right, raw PTS=1.625s
+[VIDEO] side=right, raw PTS=1.421s
+[VIDEO] side=left, raw PTS=1.421s
+[DEBUG][probe] PTS pré-GPU: 1.671s
+[DEBUG][probe] PTS pré-GPU: 1.671s
 [META] side=left, raw PTS=1.875s
 [META] side=right, raw PTS=1.875s
-[DEBUG][probe] PTS pré-GPU: 1.933s
-[DEBUG][probe] PTS pré-GPU: 1.933s
-[VIDEO] side=right, raw PTS=1.933s
-[VIDEO] side=left, raw PTS=1.933s
+[VIDEO] side=right, raw PTS=1.671s
+[VIDEO] side=left, raw PTS=1.671s
+[DEBUG][probe] PTS pré-GPU: 1.921s
+[DEBUG][probe] PTS pré-GPU: 1.921s
 [META] side=right, raw PTS=2.125s
 [META] side=left, raw PTS=2.125s
-[DEBUG][probe] PTS pré-GPU: 2.183s
-[VIDEO] side=left, raw PTS=2.183s
-[DEBUG][probe] PTS pré-GPU: 2.183s
-[VIDEO] side=right, raw PTS=2.183s
+[VIDEO] side=right, raw PTS=1.921s
+[VIDEO] side=left, raw PTS=1.921s
+[DEBUG][probe] PTS pré-GPU: 2.171s
+[DEBUG][probe] PTS pré-GPU: 2.171s
 [META] side=left, raw PTS=2.375s
 [META] side=right, raw PTS=2.375s
-[DEBUG][probe] PTS pré-GPU: 2.433s
-[DEBUG][probe] PTS pré-GPU: 2.433s
-[VIDEO] side=right, raw PTS=2.433s
-[VIDEO] side=left, raw PTS=2.433s
-[META] side=left, raw PTS=2.625s
+[VIDEO] side=right, raw PTS=2.171s
+[VIDEO] side=left, raw PTS=2.171s
+[DEBUG][probe] PTS pré-GPU: 2.421s
+[DEBUG][probe] PTS pré-GPU: 2.421s
 [META] side=right, raw PTS=2.625s
-[DEBUG][probe] PTS pré-GPU: 2.683s
-[VIDEO] side=left, raw PTS=2.683s
-[DEBUG][probe] PTS pré-GPU: 2.683s
-[VIDEO] side=right, raw PTS=2.683s
-[META] side=left, raw PTS=2.875s
+[META] side=left, raw PTS=2.625s
+[VIDEO] side=right, raw PTS=2.421s
+[VIDEO] side=left, raw PTS=2.421s
+[DEBUG][probe] PTS pré-GPU: 2.671s
+[DEBUG][probe] PTS pré-GPU: 2.671s
 [META] side=right, raw PTS=2.875s
-[DEBUG][probe] PTS pré-GPU: 2.933s
-[VIDEO] side=left, raw PTS=2.933s
-[DEBUG][probe] PTS pré-GPU: 2.933s
-[VIDEO] side=right, raw PTS=2.933s
+[META] side=left, raw PTS=2.875s
+[VIDEO] side=right, raw PTS=2.671s
+[VIDEO] side=left, raw PTS=2.671s
+[DEBUG][probe] PTS pré-GPU: 2.921s
+[DEBUG][probe] PTS pré-GPU: 2.921s
 [META] side=left, raw PTS=3.125s
 [META] start_pts initialized to 3.125s
-[META] side=left, aligned PTS=3.000s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00029.jpg
+[ALIGN] Initial offset=0.125s
+[META] side=left, aligned PTS=3.000s, filename=/home/ivm/escargot/imgs_left_numbered/img00077.jpg
 [META] side=right, raw PTS=3.125s
-[META] side=right, aligned PTS=3.000s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00029.jpg
-[DEBUG][probe] PTS pré-GPU: 3.183s
-[DEBUG][probe] PTS pré-GPU: 3.183s
-[VIDEO] side=left, raw PTS=3.183s
-[VIDEO] side=right, raw PTS=3.183s
-[VIDEO] side=right, aligned PTS=3.000s
-[VIDEO] side=left, aligned PTS=3.000s
-[SYNC] f_pts=(3.183,3.183) k_pts=(3.125,3.125) dt=0.058s
-[META] side=left, raw PTS=3.375s
-[META] side=left, aligned PTS=3.250s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00030.jpg
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=3.000s, filename=/home/ivm/escargot/imgs_right_numbered/img00077.jpg
+[QUEUE] Received klv left, raw PTS=3.125s, red=3.000s
+[DEBUG] avant insert red=3.000s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=3.000s → f_l=False, f_r=False, k_l=True(3.125s), k_r=False
+[QUEUE] Received klv right, raw PTS=3.125s, red=3.000s
+[DEBUG] avant insert red=3.000s → f_l=False, f_r=False, k_l=True(3.125s), k_r=False
+[DEBUG] après insert red=3.000s → f_l=False, f_r=False, k_l=True(3.125s), k_r=True(3.125s)
+[VIDEO] side=right, raw PTS=2.921s
+[VIDEO] side=left, raw PTS=2.921s
+[DEBUG][probe] PTS pré-GPU: 3.171s
+[DEBUG][probe] PTS pré-GPU: 3.171s
 [META] side=right, raw PTS=3.375s
-[META] side=right, aligned PTS=3.250s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00030.jpg
-[DEBUG][probe] PTS pré-GPU: 3.433s
-[DEBUG][probe] PTS pré-GPU: 3.433s
-[VIDEO] side=left, raw PTS=3.433s
-[VIDEO] side=right, raw PTS=3.433s
-[VIDEO] side=left, aligned PTS=3.250s
-[VIDEO] side=right, aligned PTS=3.250s
-[SYNC] f_pts=(3.433,3.433) k_pts=(3.375,3.375) dt=0.058s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=3.250s, filename=/home/ivm/escargot/imgs_right_numbered/img00078.jpg
+[QUEUE] Received klv right, raw PTS=3.375s, red=3.250s
+[DEBUG] avant insert red=3.250s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=3.250s → f_l=False, f_r=False, k_l=False, k_r=True(3.375s)
+[META] side=left, raw PTS=3.375s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=3.250s, filename=/home/ivm/escargot/imgs_left_numbered/img00078.jpg
+[QUEUE] Received klv left, raw PTS=3.375s, red=3.250s
+[DEBUG] avant insert red=3.250s → f_l=False, f_r=False, k_l=False, k_r=True(3.375s)
+[DEBUG] après insert red=3.250s → f_l=False, f_r=False, k_l=True(3.375s), k_r=True(3.375s)
+[VIDEO] side=right, raw PTS=3.171s
+[VIDEO] side=left, raw PTS=3.171s
+Current offset: 0.125 Updated offset: 0.134151s
+[VIDEO] side=left, aligned PTS=3.000s
+[QUEUE] Received frame left, raw PTS=3.171s, red=3.000s
+[DEBUG] avant insert red=3.000s → f_l=False, f_r=False, k_l=True(3.125s), k_r=True(3.125s)
+[DEBUG] après insert red=3.000s → f_l=True(3.171s), f_r=False, k_l=True(3.125s), k_r=True(3.125s)
+Current offset: 0.125 Updated offset: 0.134146s
+[VIDEO] side=right, aligned PTS=3.000s
+[QUEUE] Received frame right, raw PTS=3.171s, red=3.000s
+[DEBUG] avant insert red=3.000s → f_l=True(3.171s), f_r=False, k_l=True(3.125s), k_r=True(3.125s)
+[DEBUG] après insert red=3.000s → f_l=True(3.171s), f_r=True(3.171s), k_l=True(3.125s), k_r=True(3.125s)
+[SYNC] red=3.000s  fl=3.171s  fr=3.171s  kl=3.125s  kr=3.125s
+[DEBUG][probe] PTS pré-GPU: 3.421s
+[DEBUG][probe] PTS pré-GPU: 3.421s
 [META] side=left, raw PTS=3.625s
-[META] side=left, aligned PTS=3.500s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00031.jpg
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=3.500s, filename=/home/ivm/escargot/imgs_left_numbered/img00079.jpg
+[QUEUE] Received klv left, raw PTS=3.625s, red=3.500s
+[DEBUG] avant insert red=3.500s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=3.500s → f_l=False, f_r=False, k_l=True(3.625s), k_r=False
 [META] side=right, raw PTS=3.625s
-[META] side=right, aligned PTS=3.500s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00031.jpg
-[DEBUG][probe] PTS pré-GPU: 3.683s
-[DEBUG][probe] PTS pré-GPU: 3.683s
-[VIDEO] side=left, raw PTS=3.683s
-[VIDEO] side=right, raw PTS=3.683s
-[VIDEO] side=left, aligned PTS=3.500s
-[VIDEO] side=right, aligned PTS=3.500s
-[SYNC] f_pts=(3.683,3.683) k_pts=(3.625,3.625) dt=0.058s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=3.500s, filename=/home/ivm/escargot/imgs_right_numbered/img00079.jpg
+[QUEUE] Received klv right, raw PTS=3.625s, red=3.500s
+[DEBUG] avant insert red=3.500s → f_l=False, f_r=False, k_l=True(3.625s), k_r=False
+[DEBUG] après insert red=3.500s → f_l=False, f_r=False, k_l=True(3.625s), k_r=True(3.625s)
+[VIDEO] side=left, raw PTS=3.421s
+[VIDEO] side=right, raw PTS=3.421s
+Current offset: 0.125 Updated offset: 0.134163s
+[VIDEO] side=right, aligned PTS=3.250s
+[QUEUE] Received frame right, raw PTS=3.421s, red=3.250s
+[DEBUG] avant insert red=3.250s → f_l=False, f_r=False, k_l=True(3.375s), k_r=True(3.375s)
+[DEBUG] après insert red=3.250s → f_l=False, f_r=True(3.421s), k_l=True(3.375s), k_r=True(3.375s)
+Current offset: 0.125 Updated offset: 0.134153s
+[VIDEO] side=left, aligned PTS=3.250s
+[QUEUE] Received frame left, raw PTS=3.421s, red=3.250s
+[DEBUG] avant insert red=3.250s → f_l=False, f_r=True(3.421s), k_l=True(3.375s), k_r=True(3.375s)
+[DEBUG] après insert red=3.250s → f_l=True(3.421s), f_r=True(3.421s), k_l=True(3.375s), k_r=True(3.375s)
+[SYNC] red=3.250s  fl=3.421s  fr=3.421s  kl=3.375s  kr=3.375s
+[DEBUG][probe] PTS pré-GPU: 3.671s
+[DEBUG][probe] PTS pré-GPU: 3.671s
 [META] side=right, raw PTS=3.875s
-[META] side=right, aligned PTS=3.750s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00032.jpg
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=3.750s, filename=/home/ivm/escargot/imgs_right_numbered/img00080.jpg
+[QUEUE] Received klv right, raw PTS=3.875s, red=3.750s
+[DEBUG] avant insert red=3.750s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=3.750s → f_l=False, f_r=False, k_l=False, k_r=True(3.875s)
 [META] side=left, raw PTS=3.875s
-[META] side=left, aligned PTS=3.750s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00032.jpg
-[DEBUG][probe] PTS pré-GPU: 3.933s
-[DEBUG][probe] PTS pré-GPU: 3.933s
-[VIDEO] side=right, raw PTS=3.933s
-[VIDEO] side=left, raw PTS=3.933s
-[VIDEO] side=right, aligned PTS=3.750s
-[VIDEO] side=left, aligned PTS=3.750s
-[SYNC] f_pts=(3.933,3.933) k_pts=(3.875,3.875) dt=0.058s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=3.750s, filename=/home/ivm/escargot/imgs_left_numbered/img00080.jpg
+[QUEUE] Received klv left, raw PTS=3.875s, red=3.750s
+[DEBUG] avant insert red=3.750s → f_l=False, f_r=False, k_l=False, k_r=True(3.875s)
+[DEBUG] après insert red=3.750s → f_l=False, f_r=False, k_l=True(3.875s), k_r=True(3.875s)
+[VIDEO] side=right, raw PTS=3.671s
+[VIDEO] side=left, raw PTS=3.671s
+Current offset: 0.125 Updated offset: 0.134156s
+[VIDEO] side=left, aligned PTS=3.500s
+[QUEUE] Received frame left, raw PTS=3.671s, red=3.500s
+[DEBUG] avant insert red=3.500s → f_l=False, f_r=False, k_l=True(3.625s), k_r=True(3.625s)
+[DEBUG] après insert red=3.500s → f_l=True(3.671s), f_r=False, k_l=True(3.625s), k_r=True(3.625s)
+Current offset: 0.125 Updated offset: 0.134155s
+[VIDEO] side=right, aligned PTS=3.500s
+[QUEUE] Received frame right, raw PTS=3.671s, red=3.500s
+[DEBUG] avant insert red=3.500s → f_l=True(3.671s), f_r=False, k_l=True(3.625s), k_r=True(3.625s)
+[DEBUG] après insert red=3.500s → f_l=True(3.671s), f_r=True(3.671s), k_l=True(3.625s), k_r=True(3.625s)
+[SYNC] red=3.500s  fl=3.671s  fr=3.671s  kl=3.625s  kr=3.625s
+[DEBUG][probe] PTS pré-GPU: 3.921s
+[DEBUG][probe] PTS pré-GPU: 3.921s
 [META] side=left, raw PTS=4.125s
-[META] side=left, aligned PTS=4.000s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00033.jpg
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=4.000s, filename=/home/ivm/escargot/imgs_left_numbered/img00081.jpg
+[QUEUE] Received klv left, raw PTS=4.125s, red=4.000s
+[DEBUG] avant insert red=4.000s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=4.000s → f_l=False, f_r=False, k_l=True(4.125s), k_r=False
 [META] side=right, raw PTS=4.125s
-[META] side=right, aligned PTS=4.000s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00033.jpg
-[DEBUG][probe] PTS pré-GPU: 4.183s
-[DEBUG][probe] PTS pré-GPU: 4.183s
-[VIDEO] side=right, raw PTS=4.183s
-[VIDEO] side=left, raw PTS=4.183s
-[VIDEO] side=right, aligned PTS=4.000s
-[VIDEO] side=left, aligned PTS=4.000s
-[SYNC] f_pts=(4.183,4.183) k_pts=(4.125,4.125) dt=0.058s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=4.000s, filename=/home/ivm/escargot/imgs_right_numbered/img00081.jpg
+[QUEUE] Received klv right, raw PTS=4.125s, red=4.000s
+[DEBUG] avant insert red=4.000s → f_l=False, f_r=False, k_l=True(4.125s), k_r=False
+[DEBUG] après insert red=4.000s → f_l=False, f_r=False, k_l=True(4.125s), k_r=True(4.125s)
+[VIDEO] side=left, raw PTS=3.921s
+[VIDEO] side=right, raw PTS=3.921s
+Current offset: 0.125 Updated offset: 0.134145s
+[VIDEO] side=left, aligned PTS=3.750s
+[QUEUE] Received frame left, raw PTS=3.921s, red=3.750s
+[DEBUG] avant insert red=3.750s → f_l=False, f_r=False, k_l=True(3.875s), k_r=True(3.875s)
+[DEBUG] après insert red=3.750s → f_l=True(3.921s), f_r=False, k_l=True(3.875s), k_r=True(3.875s)
+Current offset: 0.125 Updated offset: 0.134156s
+[VIDEO] side=right, aligned PTS=3.750s
+[QUEUE] Received frame right, raw PTS=3.921s, red=3.750s
+[DEBUG] avant insert red=3.750s → f_l=True(3.921s), f_r=False, k_l=True(3.875s), k_r=True(3.875s)
+[DEBUG] après insert red=3.750s → f_l=True(3.921s), f_r=True(3.921s), k_l=True(3.875s), k_r=True(3.875s)
+[SYNC] red=3.750s  fl=3.921s  fr=3.921s  kl=3.875s  kr=3.875s
+[DEBUG][probe] PTS pré-GPU: 4.171s
+[DEBUG][probe] PTS pré-GPU: 4.171s
 [META] side=left, raw PTS=4.375s
-[META] side=left, aligned PTS=4.250s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00034.jpg
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=4.250s, filename=/home/ivm/escargot/imgs_left_numbered/img00082.jpg
 [META] side=right, raw PTS=4.375s
-[META] side=right, aligned PTS=4.250s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00034.jpg
-[DEBUG][probe] PTS pré-GPU: 4.433s
-[VIDEO] side=right, raw PTS=4.433s
-[DEBUG][probe] PTS pré-GPU: 4.433s
-[VIDEO] side=left, raw PTS=4.433s
-[VIDEO] side=right, aligned PTS=4.250s
-[VIDEO] side=left, aligned PTS=4.250s
-[SYNC] f_pts=(4.433,4.433) k_pts=(4.375,4.375) dt=0.058s
-[META] side=right, raw PTS=4.625s
-[META] side=right, aligned PTS=4.500s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00035.jpg
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=4.250s, filename=/home/ivm/escargot/imgs_right_numbered/img00082.jpg
+[QUEUE] Received klv left, raw PTS=4.375s, red=4.250s
+[DEBUG] avant insert red=4.250s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=4.250s → f_l=False, f_r=False, k_l=True(4.375s), k_r=False
+[QUEUE] Received klv right, raw PTS=4.375s, red=4.250s
+[DEBUG] avant insert red=4.250s → f_l=False, f_r=False, k_l=True(4.375s), k_r=False
+[DEBUG] après insert red=4.250s → f_l=False, f_r=False, k_l=True(4.375s), k_r=True(4.375s)
+[VIDEO] side=left, raw PTS=4.171s
+[VIDEO] side=right, raw PTS=4.171s
+Current offset: 0.125 Updated offset: 0.134157s
+[VIDEO] side=right, aligned PTS=4.000s
+[QUEUE] Received frame right, raw PTS=4.171s, red=4.000s
+[DEBUG] avant insert red=4.000s → f_l=False, f_r=False, k_l=True(4.125s), k_r=True(4.125s)
+[DEBUG] après insert red=4.000s → f_l=False, f_r=True(4.171s), k_l=True(4.125s), k_r=True(4.125s)
+Current offset: 0.125 Updated offset: 0.134150s
+[VIDEO] side=left, aligned PTS=4.000s
+[QUEUE] Received frame left, raw PTS=4.171s, red=4.000s
+[DEBUG] avant insert red=4.000s → f_l=False, f_r=True(4.171s), k_l=True(4.125s), k_r=True(4.125s)
+[DEBUG] après insert red=4.000s → f_l=True(4.171s), f_r=True(4.171s), k_l=True(4.125s), k_r=True(4.125s)
+[SYNC] red=4.000s  fl=4.171s  fr=4.171s  kl=4.125s  kr=4.125s
+[DEBUG][probe] PTS pré-GPU: 4.421s
+[DEBUG][probe] PTS pré-GPU: 4.421s
 [META] side=left, raw PTS=4.625s
-[META] side=left, aligned PTS=4.500s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00035.jpg
-[DEBUG][probe] PTS pré-GPU: 4.683s
-[VIDEO] side=left, raw PTS=4.683s
-[VIDEO] side=left, aligned PTS=4.500s
-[DEBUG][probe] PTS pré-GPU: 4.683s
-[VIDEO] side=right, raw PTS=4.683s
-[VIDEO] side=right, aligned PTS=4.500s
-[SYNC] f_pts=(4.683,4.683) k_pts=(4.625,4.625) dt=0.058s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=4.500s, filename=/home/ivm/escargot/imgs_left_numbered/img00083.jpg
+[QUEUE] Received klv left, raw PTS=4.625s, red=4.500s
+[DEBUG] avant insert red=4.500s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=4.500s → f_l=False, f_r=False, k_l=True(4.625s), k_r=False
+[META] side=right, raw PTS=4.625s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=4.500s, filename=/home/ivm/escargot/imgs_right_numbered/img00083.jpg
+[QUEUE] Received klv right, raw PTS=4.625s, red=4.500s
+[DEBUG] avant insert red=4.500s → f_l=False, f_r=False, k_l=True(4.625s), k_r=False
+[DEBUG] après insert red=4.500s → f_l=False, f_r=False, k_l=True(4.625s), k_r=True(4.625s)
+[VIDEO] side=left, raw PTS=4.421s
+[VIDEO] side=right, raw PTS=4.421s
+Current offset: 0.125 Updated offset: 0.134144s
+[VIDEO] side=left, aligned PTS=4.250s
+Current offset: 0.125 Updated offset: 0.134155s
+[VIDEO] side=right, aligned PTS=4.250s
+[QUEUE] Received frame left, raw PTS=4.421s, red=4.250s
+[DEBUG] avant insert red=4.250s → f_l=False, f_r=False, k_l=True(4.375s), k_r=True(4.375s)
+[DEBUG] après insert red=4.250s → f_l=True(4.421s), f_r=False, k_l=True(4.375s), k_r=True(4.375s)
+[QUEUE] Received frame right, raw PTS=4.421s, red=4.250s
+[DEBUG] avant insert red=4.250s → f_l=True(4.421s), f_r=False, k_l=True(4.375s), k_r=True(4.375s)
+[DEBUG] après insert red=4.250s → f_l=True(4.421s), f_r=True(4.421s), k_l=True(4.375s), k_r=True(4.375s)
+[SYNC] red=4.250s  fl=4.421s  fr=4.421s  kl=4.375s  kr=4.375s
+[DEBUG][probe] PTS pré-GPU: 4.671s
+[DEBUG][probe] PTS pré-GPU: 4.671s
 [META] side=right, raw PTS=4.875s
-[META] side=right, aligned PTS=4.750s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00036.jpg
-[META] side=left, raw PTS=4.875s
-[META] side=left, aligned PTS=4.750s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00036.jpg
-[DEBUG][probe] PTS pré-GPU: 4.933s
-[DEBUG][probe] PTS pré-GPU: 4.933s
-[VIDEO] side=right, raw PTS=4.933s
-[VIDEO] side=left, raw PTS=4.933s
-[VIDEO] side=right, aligned PTS=4.750s
-[VIDEO] side=left, aligned PTS=4.750s
-[SYNC] f_pts=(4.933,4.933) k_pts=(4.875,4.875) dt=0.058s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=4.750s, filename=/home/ivm/escargot/imgs_right_numbered/img00084.jpg
+[QUEUE] Received klv right, raw PTS=4.875s, red=4.750s
+[DEBUG] avant insert red=4.750s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=4.750s → f_l=False, f_r=False, k_l=False, k_r=True(4.875s)
+[QUEUE] Received klv left, raw PTS=4.875s, red=4.750s
+[DEBUG] avant insert red=4.750s → f_l=False, f_r=False, k_l=False, k_r=True(4.875s)
+[DEBUG] après insert red=4.750s → f_l=False, f_r=False, k_l=True(4.875s), k_r=True(4.875s)
+[VIDEO] side=left, raw PTS=4.671s
+[VIDEO] side=right, raw PTS=4.671s
+Current offset: 0.125 Updated offset: 0.134152s
+[VIDEO] side=left, aligned PTS=4.500s
+Current offset: 0.125 Updated offset: 0.134153s
+[VIDEO] side=right, aligned PTS=4.500s
+[QUEUE] Received frame left, raw PTS=4.671s, red=4.500s
+[DEBUG] avant insert red=4.500s → f_l=False, f_r=False, k_l=True(4.625s), k_r=True(4.625s)
+[DEBUG] après insert red=4.500s → f_l=True(4.671s), f_r=False, k_l=True(4.625s), k_r=True(4.625s)
+[QUEUE] Received frame right, raw PTS=4.671s, red=4.500s
+[DEBUG] avant insert red=4.500s → f_l=True(4.671s), f_r=False, k_l=True(4.625s), k_r=True(4.625s)
+[DEBUG] après insert red=4.500s → f_l=True(4.671s), f_r=True(4.671s), k_l=True(4.625s), k_r=True(4.625s)
+[SYNC] red=4.500s  fl=4.671s  fr=4.671s  kl=4.625s  kr=4.625s
+[DEBUG][probe] PTS pré-GPU: 4.921s
+[DEBUG][probe] PTS pré-GPU: 4.921s
 [META] side=left, raw PTS=5.125s
-[META] side=left, aligned PTS=5.000s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00037.jpg
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=5.000s, filename=/home/ivm/escargot/imgs_left_numbered/img00085.jpg
+[QUEUE] Received klv left, raw PTS=5.125s, red=5.000s
+[DEBUG] avant insert red=5.000s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=5.000s → f_l=False, f_r=False, k_l=True(5.125s), k_r=False
 [META] side=right, raw PTS=5.125s
-[META] side=right, aligned PTS=5.000s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00037.jpg
-[DEBUG][probe] PTS pré-GPU: 5.183s
-[VIDEO] side=right, raw PTS=5.183s
-[VIDEO] side=right, aligned PTS=5.000s
-[DEBUG][probe] PTS pré-GPU: 5.183s
-[VIDEO] side=left, raw PTS=5.183s
-[VIDEO] side=left, aligned PTS=5.000s
-[SYNC] f_pts=(5.183,5.183) k_pts=(5.125,5.125) dt=0.058s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=5.000s, filename=/home/ivm/escargot/imgs_right_numbered/img00085.jpg
+[QUEUE] Received klv right, raw PTS=5.125s, red=5.000s
+[DEBUG] avant insert red=5.000s → f_l=False, f_r=False, k_l=True(5.125s), k_r=False
+[DEBUG] après insert red=5.000s → f_l=False, f_r=False, k_l=True(5.125s), k_r=True(5.125s)
+[VIDEO] side=left, raw PTS=4.921s
+[VIDEO] side=right, raw PTS=4.921s
+Current offset: 0.125 Updated offset: 0.134152s
+[VIDEO] side=left, aligned PTS=4.750s
+[QUEUE] Received frame left, raw PTS=4.921s, red=4.750s
+[DEBUG] avant insert red=4.750s → f_l=False, f_r=False, k_l=True(4.875s), k_r=True(4.875s)
+[DEBUG] après insert red=4.750s → f_l=True(4.921s), f_r=False, k_l=True(4.875s), k_r=True(4.875s)
+Current offset: 0.125 Updated offset: 0.134158s
+[VIDEO] side=right, aligned PTS=4.750s
+[QUEUE] Received frame right, raw PTS=4.921s, red=4.750s
+[DEBUG] avant insert red=4.750s → f_l=True(4.921s), f_r=False, k_l=True(4.875s), k_r=True(4.875s)
+[DEBUG] après insert red=4.750s → f_l=True(4.921s), f_r=True(4.921s), k_l=True(4.875s), k_r=True(4.875s)
+[SYNC] red=4.750s  fl=4.921s  fr=4.921s  kl=4.875s  kr=4.875s
+[DEBUG][probe] PTS pré-GPU: 5.171s
+[DEBUG][probe] PTS pré-GPU: 5.171s
 [META] side=left, raw PTS=5.375s
-[META] side=left, aligned PTS=5.250s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00038.jpg
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=5.250s, filename=/home/ivm/escargot/imgs_left_numbered/img00086.jpg
+[QUEUE] Received klv left, raw PTS=5.375s, red=5.250s
+[DEBUG] avant insert red=5.250s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=5.250s → f_l=False, f_r=False, k_l=True(5.375s), k_r=False
 [META] side=right, raw PTS=5.375s
-[META] side=right, aligned PTS=5.250s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00038.jpg
-[DEBUG][probe] PTS pré-GPU: 5.433s
-[DEBUG][probe] PTS pré-GPU: 5.433s
-[VIDEO] side=right, raw PTS=5.433s
-[VIDEO] side=left, raw PTS=5.433s
-[VIDEO] side=right, aligned PTS=5.250s
-[VIDEO] side=left, aligned PTS=5.250s
-[SYNC] f_pts=(5.433,5.433) k_pts=(5.375,5.375) dt=0.058s
-[META] side=right, raw PTS=5.625s
-[META] side=right, aligned PTS=5.500s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00039.jpg
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=5.250s, filename=/home/ivm/escargot/imgs_right_numbered/img00086.jpg
+[QUEUE] Received klv right, raw PTS=5.375s, red=5.250s
+[DEBUG] avant insert red=5.250s → f_l=False, f_r=False, k_l=True(5.375s), k_r=False
+[DEBUG] après insert red=5.250s → f_l=False, f_r=False, k_l=True(5.375s), k_r=True(5.375s)
+[VIDEO] side=left, raw PTS=5.171s
+[VIDEO] side=right, raw PTS=5.171s
+Current offset: 0.125 Updated offset: 0.134159s
+[VIDEO] side=right, aligned PTS=5.000s
+Current offset: 0.125 Updated offset: 0.134153s
+[VIDEO] side=left, aligned PTS=5.000s
+[QUEUE] Received frame right, raw PTS=5.171s, red=5.000s
+[DEBUG] avant insert red=5.000s → f_l=False, f_r=False, k_l=True(5.125s), k_r=True(5.125s)
+[DEBUG] après insert red=5.000s → f_l=False, f_r=True(5.171s), k_l=True(5.125s), k_r=True(5.125s)
+[QUEUE] Received frame left, raw PTS=5.171s, red=5.000s
+[DEBUG] avant insert red=5.000s → f_l=False, f_r=True(5.171s), k_l=True(5.125s), k_r=True(5.125s)
+[DEBUG] après insert red=5.000s → f_l=True(5.171s), f_r=True(5.171s), k_l=True(5.125s), k_r=True(5.125s)
+[SYNC] red=5.000s  fl=5.171s  fr=5.171s  kl=5.125s  kr=5.125s
+[DEBUG][probe] PTS pré-GPU: 5.421s
+[DEBUG][probe] PTS pré-GPU: 5.421s
 [META] side=left, raw PTS=5.625s
-[META] side=left, aligned PTS=5.500s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00039.jpg
-[DEBUG][probe] PTS pré-GPU: 5.683s
-[DEBUG][probe] PTS pré-GPU: 5.683s
-[VIDEO] side=left, raw PTS=5.683s
-[VIDEO] side=right, raw PTS=5.683s
-[VIDEO] side=left, aligned PTS=5.500s
-[VIDEO] side=right, aligned PTS=5.500s
-[SYNC] f_pts=(5.683,5.683) k_pts=(5.625,5.625) dt=0.058s
-[META] side=right, raw PTS=5.875s
-[META] side=right, aligned PTS=5.750s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00040.jpg
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=5.500s, filename=/home/ivm/escargot/imgs_left_numbered/img00087.jpg
+[META] side=right, raw PTS=5.625s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=5.500s, filename=/home/ivm/escargot/imgs_right_numbered/img00087.jpg
+[QUEUE] Received klv left, raw PTS=5.625s, red=5.500s
+[DEBUG] avant insert red=5.500s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=5.500s → f_l=False, f_r=False, k_l=True(5.625s), k_r=False
+[QUEUE] Received klv right, raw PTS=5.625s, red=5.500s
+[DEBUG] avant insert red=5.500s → f_l=False, f_r=False, k_l=True(5.625s), k_r=False
+[DEBUG] après insert red=5.500s → f_l=False, f_r=False, k_l=True(5.625s), k_r=True(5.625s)
+[VIDEO] side=right, raw PTS=5.421s
+[VIDEO] side=left, raw PTS=5.421s
+Current offset: 0.125 Updated offset: 0.134148s
+[VIDEO] side=left, aligned PTS=5.250s
+Current offset: 0.125 Updated offset: 0.134146s
+[VIDEO] side=right, aligned PTS=5.250s
+[QUEUE] Received frame left, raw PTS=5.421s, red=5.250s
+[DEBUG] avant insert red=5.250s → f_l=False, f_r=False, k_l=True(5.375s), k_r=True(5.375s)
+[DEBUG] après insert red=5.250s → f_l=True(5.421s), f_r=False, k_l=True(5.375s), k_r=True(5.375s)
+[QUEUE] Received frame right, raw PTS=5.421s, red=5.250s
+[DEBUG] avant insert red=5.250s → f_l=True(5.421s), f_r=False, k_l=True(5.375s), k_r=True(5.375s)
+[DEBUG] après insert red=5.250s → f_l=True(5.421s), f_r=True(5.421s), k_l=True(5.375s), k_r=True(5.375s)
+[SYNC] red=5.250s  fl=5.421s  fr=5.421s  kl=5.375s  kr=5.375s
+[DEBUG][probe] PTS pré-GPU: 5.671s
+[DEBUG][probe] PTS pré-GPU: 5.671s
 [META] side=left, raw PTS=5.875s
-[META] side=left, aligned PTS=5.750s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00040.jpg
-[DEBUG][probe] PTS pré-GPU: 5.933s
-[DEBUG][probe] PTS pré-GPU: 5.933s
-[VIDEO] side=right, raw PTS=5.933s
-[VIDEO] side=left, raw PTS=5.933s
-[VIDEO] side=right, aligned PTS=5.750s
-[VIDEO] side=left, aligned PTS=5.750s
-[SYNC] f_pts=(5.933,5.933) k_pts=(5.875,5.875) dt=0.058s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=5.750s, filename=/home/ivm/escargot/imgs_left_numbered/img00088.jpg
+[META] side=right, raw PTS=5.875s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=5.750s, filename=/home/ivm/escargot/imgs_right_numbered/img00088.jpg
+[QUEUE] Received klv left, raw PTS=5.875s, red=5.750s
+[DEBUG] avant insert red=5.750s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=5.750s → f_l=False, f_r=False, k_l=True(5.875s), k_r=False
+[QUEUE] Received klv right, raw PTS=5.875s, red=5.750s
+[DEBUG] avant insert red=5.750s → f_l=False, f_r=False, k_l=True(5.875s), k_r=False
+[DEBUG] après insert red=5.750s → f_l=False, f_r=False, k_l=True(5.875s), k_r=True(5.875s)
+[VIDEO] side=right, raw PTS=5.671s
+[VIDEO] side=left, raw PTS=5.671s
+Current offset: 0.125 Updated offset: 0.134196s
+[VIDEO] side=right, aligned PTS=5.500s
+Current offset: 0.125 Updated offset: 0.134196s
+[VIDEO] side=left, aligned PTS=5.500s
+[QUEUE] Received frame right, raw PTS=5.671s, red=5.500s
+[DEBUG] avant insert red=5.500s → f_l=False, f_r=False, k_l=True(5.625s), k_r=True(5.625s)
+[DEBUG] après insert red=5.500s → f_l=False, f_r=True(5.671s), k_l=True(5.625s), k_r=True(5.625s)
+[QUEUE] Received frame left, raw PTS=5.671s, red=5.500s
+[DEBUG] avant insert red=5.500s → f_l=False, f_r=True(5.671s), k_l=True(5.625s), k_r=True(5.625s)
+[DEBUG] après insert red=5.500s → f_l=True(5.671s), f_r=True(5.671s), k_l=True(5.625s), k_r=True(5.625s)
+"$is  �"$is   ("$is  P4"$is  �@"$is  �L"$is  �X"$is  e"$is  @q"$is  p}"$is  ��"$is  Е"$is   �"$is  0�"$is  `�"$is  ��"$is  ��"$is  ��"$is   �"$is  P�"$is  �#$is  �#$is  �#$[SYNC] red=5.500s  fl=5.671s  fr=5.671s  kl=5.625s  kr=5.625s
+[DEBUG][probe] PTS pré-GPU: 5.921s
+[DEBUG][probe] PTS pré-GPU: 5.921s
 [META] side=left, raw PTS=6.125s
-[META] side=left, aligned PTS=6.000s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00041.jpg
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=6.000s, filename=/home/ivm/escargot/imgs_left_numbered/img00089.jpg
+[QUEUE] Received klv left, raw PTS=6.125s, red=6.000s
+[DEBUG] avant insert red=6.000s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=6.000s → f_l=False, f_r=False, k_l=True(6.125s), k_r=False
 [META] side=right, raw PTS=6.125s
-[META] side=right, aligned PTS=6.000s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00041.jpg
-[DEBUG][probe] PTS pré-GPU: 6.183s
-[DEBUG][probe] PTS pré-GPU: 6.183s
-[VIDEO] side=left, raw PTS=6.183s
-[VIDEO] side=right, raw PTS=6.183s
-[VIDEO] side=left, aligned PTS=6.000s
-[VIDEO] side=right, aligned PTS=6.000s
-[SYNC] f_pts=(6.183,6.183) k_pts=(6.125,6.125) dt=0.058s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=6.000s, filename=/home/ivm/escargot/imgs_right_numbered/img00089.jpg
+[QUEUE] Received klv right, raw PTS=6.125s, red=6.000s
+[DEBUG] avant insert red=6.000s → f_l=False, f_r=False, k_l=True(6.125s), k_r=False
+[DEBUG] après insert red=6.000s → f_l=False, f_r=False, k_l=True(6.125s), k_r=True(6.125s)
+[VIDEO] side=left, raw PTS=5.921s
+[VIDEO] side=right, raw PTS=5.921s
+Current offset: 0.125 Updated offset: 0.134150s
+[VIDEO] side=left, aligned PTS=5.750s
+[QUEUE] Received frame left, raw PTS=5.921s, red=5.750s
+[DEBUG] avant insert red=5.750s → f_l=False, f_r=False, k_l=True(5.875s), k_r=True(5.875s)
+[DEBUG] après insert red=5.750s → f_l=True(5.921s), f_r=False, k_l=True(5.875s), k_r=True(5.875s)
+Current offset: 0.125 Updated offset: 0.134148s
+[VIDEO] side=right, aligned PTS=5.750s
+[QUEUE] Received frame right, raw PTS=5.921s, red=5.750s
+[DEBUG] avant insert red=5.750s → f_l=True(5.921s), f_r=False, k_l=True(5.875s), k_r=True(5.875s)
+[DEBUG] après insert red=5.750s → f_l=True(5.921s), f_r=True(5.921s), k_l=True(5.875s), k_r=True(5.875s)
+[SYNC] red=5.750s  fl=5.921s  fr=5.921s  kl=5.875s  kr=5.875s
+[DEBUG][probe] PTS pré-GPU: 6.171s
+[DEBUG][probe] PTS pré-GPU: 6.171s
 [META] side=right, raw PTS=6.375s
-[META] side=right, aligned PTS=6.250s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00042.jpg
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=6.250s, filename=/home/ivm/escargot/imgs_right_numbered/img00090.jpg
+[QUEUE] Received klv right, raw PTS=6.375s, red=6.250s
+[DEBUG] avant insert red=6.250s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=6.250s → f_l=False, f_r=False, k_l=False, k_r=True(6.375s)
 [META] side=left, raw PTS=6.375s
-[META] side=left, aligned PTS=6.250s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00042.jpg
-[DEBUG][probe] PTS pré-GPU: 6.433s
-[DEBUG][probe] PTS pré-GPU: 6.433s
-[VIDEO] side=left, raw PTS=6.433s
-[VIDEO] side=right, raw PTS=6.433s
-[VIDEO] side=left, aligned PTS=6.250s
-[VIDEO] side=right, aligned PTS=6.250s
-[SYNC] f_pts=(6.433,6.433) k_pts=(6.375,6.375) dt=0.058s
-[META] side=left, raw PTS=6.625s
-[META] side=left, aligned PTS=6.500s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00043.jpg
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=6.250s, filename=/home/ivm/escargot/imgs_left_numbered/img00090.jpg
+[QUEUE] Received klv left, raw PTS=6.375s, red=6.250s
+[DEBUG] avant insert red=6.250s → f_l=False, f_r=False, k_l=False, k_r=True(6.375s)
+[DEBUG] après insert red=6.250s → f_l=False, f_r=False, k_l=True(6.375s), k_r=True(6.375s)
+[VIDEO] side=left, raw PTS=6.171s
+[VIDEO] side=right, raw PTS=6.171s
+Current offset: 0.125 Updated offset: 0.134146s
+[VIDEO] side=right, aligned PTS=6.000s
+Current offset: 0.125 Updated offset: 0.134146s
+[VIDEO] side=left, aligned PTS=6.000s
+[QUEUE] Received frame right, raw PTS=6.171s, red=6.000s
+[DEBUG] avant insert red=6.000s → f_l=False, f_r=False, k_l=True(6.125s), k_r=True(6.125s)
+[DEBUG] après insert red=6.000s → f_l=False, f_r=True(6.171s), k_l=True(6.125s), k_r=True(6.125s)
+[QUEUE] Received frame left, raw PTS=6.171s, red=6.000s
+[DEBUG] avant insert red=6.000s → f_l=False, f_r=True(6.171s), k_l=True(6.125s), k_r=True(6.125s)
+[DEBUG] après insert red=6.000s → f_l=True(6.171s), f_r=True(6.171s), k_l=True(6.125s), k_r=True(6.125s)
+[SYNC] red=6.000s  fl=6.171s  fr=6.171s  kl=6.125s  kr=6.125s
+[DEBUG][probe] PTS pré-GPU: 6.421s
+[DEBUG][probe] PTS pré-GPU: 6.421s
 [META] side=right, raw PTS=6.625s
-[META] side=right, aligned PTS=6.500s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00043.jpg
-[DEBUG][probe] PTS pré-GPU: 6.683s
-[DEBUG][probe] PTS pré-GPU: 6.683s
-[VIDEO] side=left, raw PTS=6.683s
-[VIDEO] side=right, raw PTS=6.683s
-[VIDEO] side=left, aligned PTS=6.500s
-[VIDEO] side=right, aligned PTS=6.500s
-[SYNC] f_pts=(6.683,6.683) k_pts=(6.625,6.625) dt=0.058s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=6.500s, filename=/home/ivm/escargot/imgs_right_numbered/img00091.jpg
+[QUEUE] Received klv right, raw PTS=6.625s, red=6.500s
+[DEBUG] avant insert red=6.500s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=6.500s → f_l=False, f_r=False, k_l=False, k_r=True(6.625s)
+[META] side=left, raw PTS=6.625s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=6.500s, filename=/home/ivm/escargot/imgs_left_numbered/img00091.jpg
+[QUEUE] Received klv left, raw PTS=6.625s, red=6.500s
+[DEBUG] avant insert red=6.500s → f_l=False, f_r=False, k_l=False, k_r=True(6.625s)
+[DEBUG] après insert red=6.500s → f_l=False, f_r=False, k_l=True(6.625s), k_r=True(6.625s)
+[VIDEO] side=left, raw PTS=6.421s
+Current offset: 0.125 Updated offset: 0.134140s
+[VIDEO] side=left, aligned PTS=6.250s
+[QUEUE] Received frame left, raw PTS=6.421s, red=6.250s
+[DEBUG] avant insert red=6.250s → f_l=False, f_r=False, k_l=True(6.375s), k_r=True(6.375s)
+[DEBUG] après insert red=6.250s → f_l=True(6.421s), f_r=False, k_l=True(6.375s), k_r=True(6.375s)
+[VIDEO] side=right, raw PTS=6.421s
+Current offset: 0.125 Updated offset: 0.134193s
+[VIDEO] side=right, aligned PTS=6.250s
+[QUEUE] Received frame right, raw PTS=6.421s, red=6.250s
+[DEBUG] avant insert red=6.250s → f_l=True(6.421s), f_r=False, k_l=True(6.375s), k_r=True(6.375s)
+[DEBUG] après insert red=6.250s → f_l=True(6.421s), f_r=True(6.421s), k_l=True(6.375s), k_r=True(6.375s)
+[SYNC] red=6.250s  fl=6.421s  fr=6.421s  kl=6.375s  kr=6.375s
+[DEBUG][probe] PTS pré-GPU: 6.671s
+[DEBUG][probe] PTS pré-GPU: 6.671s
 [META] side=left, raw PTS=6.875s
-[META] side=left, aligned PTS=6.750s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00044.jpg
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=6.750s, filename=/home/ivm/escargot/imgs_left_numbered/img00092.jpg
+[QUEUE] Received klv left, raw PTS=6.875s, red=6.750s
+[DEBUG] avant insert red=6.750s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=6.750s → f_l=False, f_r=False, k_l=True(6.875s), k_r=False
 [META] side=right, raw PTS=6.875s
-[META] side=right, aligned PTS=6.750s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00044.jpg
-[DEBUG][probe] PTS pré-GPU: 6.933s
-[VIDEO] side=right, raw PTS=6.933s
-[VIDEO] side=right, aligned PTS=6.750s
-[DEBUG][probe] PTS pré-GPU: 6.933s
-[VIDEO] side=left, raw PTS=6.933s
-[VIDEO] side=left, aligned PTS=6.750s
-[SYNC] f_pts=(6.933,6.933) k_pts=(6.875,6.875) dt=0.058s
-[META] side=left, raw PTS=7.125s
-[META] side=left, aligned PTS=7.000s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00045.jpg
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=6.750s, filename=/home/ivm/escargot/imgs_right_numbered/img00092.jpg
+[QUEUE] Received klv right, raw PTS=6.875s, red=6.750s
+[DEBUG] avant insert red=6.750s → f_l=False, f_r=False, k_l=True(6.875s), k_r=False
+[DEBUG] après insert red=6.750s → f_l=False, f_r=False, k_l=True(6.875s), k_r=True(6.875s)
+[VIDEO] side=left, raw PTS=6.671s
+[VIDEO] side=right, raw PTS=6.671s
+Current offset: 0.125 Updated offset: 0.134141s
+[VIDEO] side=left, aligned PTS=6.500s
+[QUEUE] Received frame left, raw PTS=6.671s, red=6.500s
+[DEBUG] avant insert red=6.500s → f_l=False, f_r=False, k_l=True(6.625s), k_r=True(6.625s)
+[DEBUG] après insert red=6.500s → f_l=True(6.671s), f_r=False, k_l=True(6.625s), k_r=True(6.625s)
+Current offset: 0.125 Updated offset: 0.134153s
+[VIDEO] side=right, aligned PTS=6.500s
+[QUEUE] Received frame right, raw PTS=6.671s, red=6.500s
+[DEBUG] avant insert red=6.500s → f_l=True(6.671s), f_r=False, k_l=True(6.625s), k_r=True(6.625s)
+[DEBUG] après insert red=6.500s → f_l=True(6.671s), f_r=True(6.671s), k_l=True(6.625s), k_r=True(6.625s)
+[SYNC] red=6.500s  fl=6.671s  fr=6.671s  kl=6.625s  kr=6.625s
+[DEBUG][probe] PTS pré-GPU: 6.921s
+[DEBUG][probe] PTS pré-GPU: 6.921s
 [META] side=right, raw PTS=7.125s
-[META] side=right, aligned PTS=7.000s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00045.jpg
-[DEBUG][probe] PTS pré-GPU: 7.183s
-[DEBUG][probe] PTS pré-GPU: 7.183s
-[VIDEO] side=right, raw PTS=7.183s
-[VIDEO] side=left, raw PTS=7.183s
-[VIDEO] side=right, aligned PTS=7.000s
-[VIDEO] side=left, aligned PTS=7.000s
-[SYNC] f_pts=(7.183,7.183) k_pts=(7.125,7.125) dt=0.058s
-[META] side=right, raw PTS=7.375s
-[META] side=right, aligned PTS=7.250s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00046.jpg
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=7.000s, filename=/home/ivm/escargot/imgs_right_numbered/img00093.jpg
+[QUEUE] Received klv right, raw PTS=7.125s, red=7.000s
+[DEBUG] avant insert red=7.000s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=7.000s → f_l=False, f_r=False, k_l=False, k_r=True(7.125s)
+[META] side=left, raw PTS=7.125s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=7.000s, filename=/home/ivm/escargot/imgs_left_numbered/img00093.jpg
+[QUEUE] Received klv left, raw PTS=7.125s, red=7.000s
+[DEBUG] avant insert red=7.000s → f_l=False, f_r=False, k_l=False, k_r=True(7.125s)
+[DEBUG] après insert red=7.000s → f_l=False, f_r=False, k_l=True(7.125s), k_r=True(7.125s)
+[VIDEO] side=left, raw PTS=6.921s
+[VIDEO] side=right, raw PTS=6.921s
+Current offset: 0.125 Updated offset: 0.134150s
+[VIDEO] side=right, aligned PTS=6.750s
+Current offset: 0.125 Updated offset: 0.134146s
+[VIDEO] side=left, aligned PTS=6.750s
+[QUEUE] Received frame right, raw PTS=6.921s, red=6.750s
+[DEBUG] avant insert red=6.750s → f_l=False, f_r=False, k_l=True(6.875s), k_r=True(6.875s)
+[DEBUG] après insert red=6.750s → f_l=False, f_r=True(6.921s), k_l=True(6.875s), k_r=True(6.875s)
+[QUEUE] Received frame left, raw PTS=6.921s, red=6.750s
+[DEBUG] avant insert red=6.750s → f_l=False, f_r=True(6.921s), k_l=True(6.875s), k_r=True(6.875s)
+[DEBUG] après insert red=6.750s → f_l=True(6.921s), f_r=True(6.921s), k_l=True(6.875s), k_r=True(6.875s)
+[SYNC] red=6.750s  fl=6.921s  fr=6.921s  kl=6.875s  kr=6.875s
+[DEBUG][probe] PTS pré-GPU: 7.171s
+[DEBUG][probe] PTS pré-GPU: 7.171s
 [META] side=left, raw PTS=7.375s
-[META] side=left, aligned PTS=7.250s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00046.jpg
-[DEBUG][probe] PTS pré-GPU: 7.433s
-[VIDEO] side=left, raw PTS=7.433s
-[VIDEO] side=left, aligned PTS=7.250s
-[DEBUG][probe] PTS pré-GPU: 7.433s
-[VIDEO] side=right, raw PTS=7.433s
-[VIDEO] side=right, aligned PTS=7.250s
-[SYNC] f_pts=(7.433,7.433) k_pts=(7.375,7.375) dt=0.058s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=7.250s, filename=/home/ivm/escargot/imgs_left_numbered/img00094.jpg
+[META] side=right, raw PTS=7.375s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=7.250s, filename=/home/ivm/escargot/imgs_right_numbered/img00094.jpg
+[QUEUE] Received klv left, raw PTS=7.375s, red=7.250s
+[DEBUG] avant insert red=7.250s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=7.250s → f_l=False, f_r=False, k_l=True(7.375s), k_r=False
+[QUEUE] Received klv right, raw PTS=7.375s, red=7.250s
+[DEBUG] avant insert red=7.250s → f_l=False, f_r=False, k_l=True(7.375s), k_r=False
+[DEBUG] après insert red=7.250s → f_l=False, f_r=False, k_l=True(7.375s), k_r=True(7.375s)
+[VIDEO] side=left, raw PTS=7.171s
+[VIDEO] side=right, raw PTS=7.171s
+Current offset: 0.125 Updated offset: 0.134147s
+[VIDEO] side=right, aligned PTS=7.000s
+Current offset: 0.125 Updated offset: 0.134141s
+[VIDEO] side=left, aligned PTS=7.000s
+[QUEUE] Received frame right, raw PTS=7.171s, red=7.000s
+[DEBUG] avant insert red=7.000s → f_l=False, f_r=False, k_l=True(7.125s), k_r=True(7.125s)
+[DEBUG] après insert red=7.000s → f_l=False, f_r=True(7.171s), k_l=True(7.125s), k_r=True(7.125s)
+[QUEUE] Received frame left, raw PTS=7.171s, red=7.000s
+[DEBUG] avant insert red=7.000s → f_l=False, f_r=True(7.171s), k_l=True(7.125s), k_r=True(7.125s)
+[DEBUG] après insert red=7.000s → f_l=True(7.171s), f_r=True(7.171s), k_l=True(7.125s), k_r=True(7.125s)
+[SYNC] red=7.000s  fl=7.171s  fr=7.171s  kl=7.125s  kr=7.125s
+[DEBUG][probe] PTS pré-GPU: 7.421s
+[DEBUG][probe] PTS pré-GPU: 7.421s
 [META] side=left, raw PTS=7.625s
-[META] side=left, aligned PTS=7.500s, filename=/home/smith/dataset/sequences/00/image_1/jpgs_numbered/00047.jpg
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=7.500s, filename=/home/ivm/escargot/imgs_left_numbered/img00095.jpg
+[QUEUE] Received klv left, raw PTS=7.625s, red=7.500s
+[DEBUG] avant insert red=7.500s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=7.500s → f_l=False, f_r=False, k_l=True(7.625s), k_r=False
 [META] side=right, raw PTS=7.625s
-[META] side=right, aligned PTS=7.500s, filename=/home/smith/dataset/sequences/00/image_0/jpgs_numbered/00047.jpg
-[DEBUG][probe] PTS pré-GPU: 7.683s
-[DEBUG][probe] PTS pré-GPU: 7.683s
-[VIDEO] side=left, raw PTS=7.683s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=7.500s, filename=/home/ivm/escargot/imgs_right_numbered/img00095.jpg
+[QUEUE] Received klv right, raw PTS=7.625s, red=7.500s
+[DEBUG] avant insert red=7.500s → f_l=False, f_r=False, k_l=True(7.625s), k_r=False
+[DEBUG] après insert red=7.500s → f_l=False, f_r=False, k_l=True(7.625s), k_r=True(7.625s)
+[VIDEO] side=left, raw PTS=7.421s
+[VIDEO] side=right, raw PTS=7.421s
+Current offset: 0.125 Updated offset: 0.134145s
+[VIDEO] side=left, aligned PTS=7.250s
+[QUEUE] Received frame left, raw PTS=7.421s, red=7.250s
+[DEBUG] avant insert red=7.250s → f_l=False, f_r=False, k_l=True(7.375s), k_r=True(7.375s)
+[DEBUG] après insert red=7.250s → f_l=True(7.421s), f_r=False, k_l=True(7.375s), k_r=True(7.375s)
+Current offset: 0.125 Updated offset: 0.134146s
+[VIDEO] side=right, aligned PTS=7.250s
+[QUEUE] Received frame right, raw PTS=7.421s, red=7.250s
+[DEBUG] avant insert red=7.250s → f_l=True(7.421s), f_r=False, k_l=True(7.375s), k_r=True(7.375s)
+[DEBUG] après insert red=7.250s → f_l=True(7.421s), f_r=True(7.421s), k_l=True(7.375s), k_r=True(7.375s)
+[SYNC] red=7.250s  fl=7.421s  fr=7.421s  kl=7.375s  kr=7.375s
+[DEBUG][probe] PTS pré-GPU: 7.671s
+[DEBUG][probe] PTS pré-GPU: 7.671s
+[META] side=right, raw PTS=7.875s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=7.750s, filename=/home/ivm/escargot/imgs_right_numbered/img00096.jpg
+[QUEUE] Received klv right, raw PTS=7.875s, red=7.750s
+[DEBUG] avant insert red=7.750s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=7.750s → f_l=False, f_r=False, k_l=False, k_r=True(7.875s)
+[META] side=left, raw PTS=7.875s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=7.750s, filename=/home/ivm/escargot/imgs_left_numbered/img00096.jpg
+[QUEUE] Received klv left, raw PTS=7.875s, red=7.750s
+[DEBUG] avant insert red=7.750s → f_l=False, f_r=False, k_l=False, k_r=True(7.875s)
+[DEBUG] après insert red=7.750s → f_l=False, f_r=False, k_l=True(7.875s), k_r=True(7.875s)
+[VIDEO] side=left, raw PTS=7.671s
+[VIDEO] side=right, raw PTS=7.671s
+Current offset: 0.125 Updated offset: 0.134143s
+[VIDEO] side=left, aligned PTS=7.500s
+[QUEUE] Received frame left, raw PTS=7.671s, red=7.500s
+[DEBUG] avant insert red=7.500s → f_l=False, f_r=False, k_l=True(7.625s), k_r=True(7.625s)
+[DEBUG] après insert red=7.500s → f_l=True(7.671s), f_r=False, k_l=True(7.625s), k_r=True(7.625s)
+Current offset: 0.125 Updated offset: 0.134147s
+[VIDEO] side=right, aligned PTS=7.500s
+[QUEUE] Received frame right, raw PTS=7.671s, red=7.500s
+[DEBUG] avant insert red=7.500s → f_l=True(7.671s), f_r=False, k_l=True(7.625s), k_r=True(7.625s)
+[DEBUG] après insert red=7.500s → f_l=True(7.671s), f_r=True(7.671s), k_l=True(7.625s), k_r=True(7.625s)
+[SYNC] red=7.500s  fl=7.671s  fr=7.671s  kl=7.625s  kr=7.625s
+[DEBUG][probe] PTS pré-GPU: 7.921s
+[DEBUG][probe] PTS pré-GPU: 7.921s
+[META] side=right, raw PTS=8.125s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=8.000s, filename=/home/ivm/escargot/imgs_right_numbered/img00097.jpg
+[META] side=left, raw PTS=8.125s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=8.000s, filename=/home/ivm/escargot/imgs_left_numbered/img00097.jpg
+[QUEUE] Received klv right, raw PTS=8.125s, red=8.000s
+[DEBUG] avant insert red=8.000s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=8.000s → f_l=False, f_r=False, k_l=False, k_r=True(8.125s)
+[QUEUE] Received klv left, raw PTS=8.125s, red=8.000s
+[DEBUG] avant insert red=8.000s → f_l=False, f_r=False, k_l=False, k_r=True(8.125s)
+[DEBUG] après insert red=8.000s → f_l=False, f_r=False, k_l=True(8.125s), k_r=True(8.125s)
+[VIDEO] side=left, raw PTS=7.921s
+[VIDEO] side=right, raw PTS=7.921s
+Current offset: 0.125 Updated offset: 0.134146s
+[VIDEO] side=right, aligned PTS=7.750s
+Current offset: 0.125 Updated offset: 0.134145s
+[VIDEO] side=left, aligned PTS=7.750s
+[QUEUE] Received frame right, raw PTS=7.921s, red=7.750s
+[DEBUG] avant insert red=7.750s → f_l=False, f_r=False, k_l=True(7.875s), k_r=True(7.875s)
+[DEBUG] après insert red=7.750s → f_l=False, f_r=True(7.921s), k_l=True(7.875s), k_r=True(7.875s)
+[QUEUE] Received frame left, raw PTS=7.921s, red=7.750s
+[DEBUG] avant insert red=7.750s → f_l=False, f_r=True(7.921s), k_l=True(7.875s), k_r=True(7.875s)
+[DEBUG] après insert red=7.750s → f_l=True(7.921s), f_r=True(7.921s), k_l=True(7.875s), k_r=True(7.875s)
+[SYNC] red=7.750s  fl=7.921s  fr=7.921s  kl=7.875s  kr=7.875s
+[DEBUG][probe] PTS pré-GPU: 8.171s
+[DEBUG][probe] PTS pré-GPU: 8.171s
+[META] side=right, raw PTS=8.375s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=8.250s, filename=/home/ivm/escargot/imgs_right_numbered/img00098.jpg
+[QUEUE] Received klv right, raw PTS=8.375s, red=8.250s
+[DEBUG] avant insert red=8.250s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=8.250s → f_l=False, f_r=False, k_l=False, k_r=True(8.375s)
+[META] side=left, raw PTS=8.375s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=8.250s, filename=/home/ivm/escargot/imgs_left_numbered/img00098.jpg
+[QUEUE] Received klv left, raw PTS=8.375s, red=8.250s
+[DEBUG] avant insert red=8.250s → f_l=False, f_r=False, k_l=False, k_r=True(8.375s)
+[DEBUG] après insert red=8.250s → f_l=False, f_r=False, k_l=True(8.375s), k_r=True(8.375s)
+[VIDEO] side=left, raw PTS=8.171s
+[VIDEO] side=right, raw PTS=8.171s
+[QUEUE] Received frame left, raw PTS=8.171s, red=8.000s
+[DEBUG] avant insert red=8.000s → f_l=False, f_r=False, k_l=True(8.125s), k_r=True(8.125s)
+[DEBUG] après insert red=8.000s → f_l=True(8.171s), f_r=False, k_l=True(8.125s), k_r=True(8.125s)
+Current offset: 0.125 Updated offset: 0.134148s
+[VIDEO] side=right, aligned PTS=8.000s
+[QUEUE] Received frame right, raw PTS=8.171s, red=8.000s
+[DEBUG] avant insert red=8.000s → f_l=True(8.171s), f_r=False, k_l=True(8.125s), k_r=True(8.125s)
+[DEBUG] après insert red=8.000s → f_l=True(8.171s), f_r=True(8.171s), k_l=True(8.125s), k_r=True(8.125s)
+[SYNC] red=8.000s  fl=8.171s  fr=8.171s  kl=8.125s  kr=8.125s
+[DEBUG][probe] PTS pré-GPU: 8.421s
+[DEBUG][probe] PTS pré-GPU: 8.421s
+[META] side=left, raw PTS=8.625s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=8.500s, filename=/home/ivm/escargot/imgs_left_numbered/img00099.jpg
+[QUEUE] Received klv left, raw PTS=8.625s, red=8.500s
+[DEBUG] avant insert red=8.500s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=8.500s → f_l=False, f_r=False, k_l=True(8.625s), k_r=False
+[META] side=right, raw PTS=8.625s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=8.500s, filename=/home/ivm/escargot/imgs_right_numbered/img00099.jpg
+[QUEUE] Received klv right, raw PTS=8.625s, red=8.500s
+[DEBUG] avant insert red=8.500s → f_l=False, f_r=False, k_l=True(8.625s), k_r=False
+[DEBUG] après insert red=8.500s → f_l=False, f_r=False, k_l=True(8.625s), k_r=True(8.625s)
+[VIDEO] side=left, raw PTS=8.421s
+[VIDEO] side=right, raw PTS=8.421s
+Current offset: 0.125 Updated offset: 0.134142s
+[VIDEO] side=left, aligned PTS=8.250s
+[QUEUE] Received frame left, raw PTS=8.421s, red=8.250s
+[DEBUG] avant insert red=8.250s → f_l=False, f_r=False, k_l=True(8.375s), k_r=True(8.375s)
+[DEBUG] après insert red=8.250s → f_l=True(8.421s), f_r=False, k_l=True(8.375s), k_r=True(8.375s)
+Current offset: 0.125 Updated offset: 0.134148s
+[VIDEO] side=right, aligned PTS=8.250s
+[QUEUE] Received frame right, raw PTS=8.421s, red=8.250s
+[DEBUG] avant insert red=8.250s → f_l=True(8.421s), f_r=False, k_l=True(8.375s), k_r=True(8.375s)
+[DEBUG] après insert red=8.250s → f_l=True(8.421s), f_r=True(8.421s), k_l=True(8.375s), k_r=True(8.375s)
+[SYNC] red=8.250s  fl=8.421s  fr=8.421s  kl=8.375s  kr=8.375s
+[DEBUG][probe] PTS pré-GPU: 8.671s
+[DEBUG][probe] PTS pré-GPU: 8.671s
+[META] side=right, raw PTS=8.875s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=8.750s, filename=/home/ivm/escargot/imgs_right_numbered/img00100.jpg
+[QUEUE] Received klv right, raw PTS=8.875s, red=8.750s
+[DEBUG] avant insert red=8.750s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=8.750s → f_l=False, f_r=False, k_l=False, k_r=True(8.875s)
+[META] side=left, raw PTS=8.875s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=8.750s, filename=/home/ivm/escargot/imgs_left_numbered/img00100.jpg
+[QUEUE] Received klv left, raw PTS=8.875s, red=8.750s
+[DEBUG] avant insert red=8.750s → f_l=False, f_r=False, k_l=False, k_r=True(8.875s)
+[DEBUG] après insert red=8.750s → f_l=False, f_r=False, k_l=True(8.875s), k_r=True(8.875s)
+[VIDEO] side=left, raw PTS=8.671s
+[VIDEO] side=right, raw PTS=8.671s
+Current offset: 0.125 Updated offset: 0.134140s
+[VIDEO] side=left, aligned PTS=8.500s
+[QUEUE] Received frame left, raw PTS=8.671s, red=8.500s
+[DEBUG] avant insert red=8.500s → f_l=False, f_r=False, k_l=True(8.625s), k_r=True(8.625s)
+[DEBUG] après insert red=8.500s → f_l=True(8.671s), f_r=False, k_l=True(8.625s), k_r=True(8.625s)
+Current offset: 0.125 Updated offset: 0.134145s
+[VIDEO] side=right, aligned PTS=8.500s
+[QUEUE] Received frame right, raw PTS=8.671s, red=8.500s
+[DEBUG] avant insert red=8.500s → f_l=True(8.671s), f_r=False, k_l=True(8.625s), k_r=True(8.625s)
+[DEBUG] après insert red=8.500s → f_l=True(8.671s), f_r=True(8.671s), k_l=True(8.625s), k_r=True(8.625s)
+[SYNC] red=8.500s  fl=8.671s  fr=8.671s  kl=8.625s  kr=8.625s
+[DEBUG][probe] PTS pré-GPU: 8.921s
+[DEBUG][probe] PTS pré-GPU: 8.921s
+[META] side=right, raw PTS=9.125s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=9.000s, filename=/home/ivm/escargot/imgs_right_numbered/img00101.jpg
+[QUEUE] Received klv right, raw PTS=9.125s, red=9.000s
+[DEBUG] avant insert red=9.000s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=9.000s → f_l=False, f_r=False, k_l=False, k_r=True(9.125s)
+[META] side=left, raw PTS=9.125s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=9.000s, filename=/home/ivm/escargot/imgs_left_numbered/img00101.jpg
+[QUEUE] Received klv left, raw PTS=9.125s, red=9.000s
+[DEBUG] avant insert red=9.000s → f_l=False, f_r=False, k_l=False, k_r=True(9.125s)
+[DEBUG] après insert red=9.000s → f_l=False, f_r=False, k_l=True(9.125s), k_r=True(9.125s)
+[VIDEO] side=left, raw PTS=8.921s
+[VIDEO] side=right, raw PTS=8.921s
+Current offset: 0.125 Updated offset: 0.134145s
+[VIDEO] side=left, aligned PTS=8.750s
+[QUEUE] Received frame left, raw PTS=8.921s, red=8.750s
+[DEBUG] avant insert red=8.750s → f_l=False, f_r=False, k_l=True(8.875s), k_r=True(8.875s)
+[DEBUG] après insert red=8.750s → f_l=True(8.921s), f_r=False, k_l=True(8.875s), k_r=True(8.875s)
+Current offset: 0.125 Updated offset: 0.134145s
+[VIDEO] side=right, aligned PTS=8.750s
+[QUEUE] Received frame right, raw PTS=8.921s, red=8.750s
+[DEBUG] avant insert red=8.750s → f_l=True(8.921s), f_r=False, k_l=True(8.875s), k_r=True(8.875s)
+[DEBUG] après insert red=8.750s → f_l=True(8.921s), f_r=True(8.921s), k_l=True(8.875s), k_r=True(8.875s)
+[SYNC] red=8.750s  fl=8.921s  fr=8.921s  kl=8.875s  kr=8.875s
+[DEBUG][probe] PTS pré-GPU: 9.171s
+[DEBUG][probe] PTS pré-GPU: 9.171s
+[META] side=right, raw PTS=9.375s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=9.250s, filename=/home/ivm/escargot/imgs_right_numbered/img00102.jpg
+[META] side=left, raw PTS=9.375s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=9.250s, filename=/home/ivm/escargot/imgs_left_numbered/img00102.jpg
+[QUEUE] Received klv right, raw PTS=9.375s, red=9.250s
+[DEBUG] avant insert red=9.250s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=9.250s → f_l=False, f_r=False, k_l=False, k_r=True(9.375s)
+[QUEUE] Received klv left, raw PTS=9.375s, red=9.250s
+[DEBUG] avant insert red=9.250s → f_l=False, f_r=False, k_l=False, k_r=True(9.375s)
+[DEBUG] après insert red=9.250s → f_l=False, f_r=False, k_l=True(9.375s), k_r=True(9.375s)
+[VIDEO] side=left, raw PTS=9.171s
+[VIDEO] side=right, raw PTS=9.171s
+Current offset: 0.125 Updated offset: 0.134142s
+[VIDEO] side=right, aligned PTS=9.000s
+[QUEUE] Received frame right, raw PTS=9.171s, red=9.000s
+[DEBUG] avant insert red=9.000s → f_l=False, f_r=False, k_l=True(9.125s), k_r=True(9.125s)
+[DEBUG] après insert red=9.000s → f_l=False, f_r=True(9.171s), k_l=True(9.125s), k_r=True(9.125s)
+Current offset: 0.125 Updated offset: 0.134140s
+[VIDEO] side=left, aligned PTS=9.000s
+[QUEUE] Received frame left, raw PTS=9.171s, red=9.000s
+[DEBUG] avant insert red=9.000s → f_l=False, f_r=True(9.171s), k_l=True(9.125s), k_r=True(9.125s)
+[DEBUG] après insert red=9.000s → f_l=True(9.171s), f_r=True(9.171s), k_l=True(9.125s), k_r=True(9.125s)
+[SYNC] red=9.000s  fl=9.171s  fr=9.171s  kl=9.125s  kr=9.125s
+[DEBUG][probe] PTS pré-GPU: 9.421s
+[DEBUG][probe] PTS pré-GPU: 9.421s
+[META] side=left, raw PTS=9.625s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=9.500s, filename=/home/ivm/escargot/imgs_left_numbered/img00103.jpg
+[META] side=right, raw PTS=9.625s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=9.500s, filename=/home/ivm/escargot/imgs_right_numbered/img00103.jpg
+[QUEUE] Received klv left, raw PTS=9.625s, red=9.500s
+[DEBUG] avant insert red=9.500s → f_l=False, f_r=False, k_l=False, k_r=False
+������			������   ������			���������   ������������   ��[DEBUG] après insert red=9.500s → f_l=False, f_r=False, k_l=True(9.625s), k_r=False
+[QUEUE] Received klv right, raw PTS=9.625s, red=9.500s
+[DEBUG] avant insert red=9.500s → f_l=False, f_r=False, k_l=True(9.625s), k_r=False
+[DEBUG] après insert red=9.500s → f_l=False, f_r=False, k_l=True(9.625s), k_r=True(9.625s)
+[VIDEO] side=left, raw PTS=9.421s
+[VIDEO] side=right, raw PTS=9.421s
+Current offset: 0.125 Updated offset: 0.134142s
+[VIDEO] side=left, aligned PTS=9.250s
+Current offset: 0.125 Updated offset: 0.134152s
+[VIDEO] side=right, aligned PTS=9.250s
+[QUEUE] Received frame left, raw PTS=9.421s, red=9.250s
+[DEBUG] avant insert red=9.250s → f_l=False, f_r=False, k_l=True(9.375s), k_r=True(9.375s)
+[DEBUG] après insert red=9.250s → f_l=True(9.421s), f_r=False, k_l=True(9.375s), k_r=True(9.375s)
+[QUEUE] Received frame right, raw PTS=9.421s, red=9.250s
+[DEBUG] avant insert red=9.250s → f_l=True(9.421s), f_r=False, k_l=True(9.375s), k_r=True(9.375s)
+[DEBUG] après insert red=9.250s → f_l=True(9.421s), f_r=True(9.421s), k_l=True(9.375s), k_r=True(9.375s)
+[SYNC] red=9.250s  fl=9.421s  fr=9.421s  kl=9.375s  kr=9.375s
+[DEBUG][probe] PTS pré-GPU: 9.671s
+[DEBUG][probe] PTS pré-GPU: 9.671s
+[META] side=left, raw PTS=9.875s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=9.750s, filename=/home/ivm/escargot/imgs_left_numbered/img00104.jpg
+[QUEUE] Received klv left, raw PTS=9.875s, red=9.750s
+[DEBUG] avant insert red=9.750s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=9.750s → f_l=False, f_r=False, k_l=True(9.875s), k_r=False
+[META] side=right, raw PTS=9.875s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=9.750s, filename=/home/ivm/escargot/imgs_right_numbered/img00104.jpg
+[QUEUE] Received klv right, raw PTS=9.875s, red=9.750s
+[DEBUG] avant insert red=9.750s → f_l=False, f_r=False, k_l=True(9.875s), k_r=False
+[DEBUG] après insert red=9.750s → f_l=False, f_r=False, k_l=True(9.875s), k_r=True(9.875s)
+[VIDEO] side=left, raw PTS=9.671s
+[VIDEO] side=right, raw PTS=9.671s
+Current offset: 0.125 Updated offset: 0.134140s
+[VIDEO] side=left, aligned PTS=9.500s
+Current offset: 0.125 Updated offset: 0.134157s
+[VIDEO] side=right, aligned PTS=9.500s
+[QUEUE] Received frame left, raw PTS=9.671s, red=9.500s
+[DEBUG] avant insert red=9.500s → f_l=False, f_r=False, k_l=True(9.625s), k_r=True(9.625s)
+[DEBUG] après insert red=9.500s → f_l=True(9.671s), f_r=False, k_l=True(9.625s), k_r=True(9.625s)
+[QUEUE] Received frame right, raw PTS=9.671s, red=9.500s
+[DEBUG] avant insert red=9.500s → f_l=True(9.671s), f_r=False, k_l=True(9.625s), k_r=True(9.625s)
+[DEBUG] après insert red=9.500s → f_l=True(9.671s), f_r=True(9.671s), k_l=True(9.625s), k_r=True(9.625s)
+[SYNC] red=9.500s  fl=9.671s  fr=9.671s  kl=9.625s  kr=9.625s
+[DEBUG][probe] PTS pré-GPU: 9.921s
+[DEBUG][probe] PTS pré-GPU: 9.921s
+[META] side=right, raw PTS=10.125s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=10.000s, filename=/home/ivm/escargot/imgs_right_numbered/img00105.jpg
+[QUEUE] Received klv right, raw PTS=10.125s, red=10.000s
+[DEBUG] avant insert red=10.000s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=10.000s → f_l=False, f_r=False, k_l=False, k_r=True(10.125s)
+[META] side=left, raw PTS=10.125s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=10.000s, filename=/home/ivm/escargot/imgs_left_numbered/img00105.jpg
+[QUEUE] Received klv left, raw PTS=10.125s, red=10.000s
+[DEBUG] avant insert red=10.000s → f_l=False, f_r=False, k_l=False, k_r=True(10.125s)
+[DEBUG] après insert red=10.000s → f_l=False, f_r=False, k_l=True(10.125s), k_r=True(10.125s)
+[VIDEO] side=left, raw PTS=9.921s
+[VIDEO] side=right, raw PTS=9.921s
+Current offset: 0.125 Updated offset: 0.134145s
+[VIDEO] side=left, aligned PTS=9.750s
+[QUEUE] Received frame left, raw PTS=9.921s, red=9.750s
+[DEBUG] avant insert red=9.750s → f_l=False, f_r=False, k_l=True(9.875s), k_r=True(9.875s)
+[DEBUG] après insert red=9.750s → f_l=True(9.921s), f_r=False, k_l=True(9.875s), k_r=True(9.875s)
+Current offset: 0.125 Updated offset: 0.134159s
+[VIDEO] side=right, aligned PTS=9.750s
+[QUEUE] Received frame right, raw PTS=9.921s, red=9.750s
+[DEBUG] avant insert red=9.750s → f_l=True(9.921s), f_r=False, k_l=True(9.875s), k_r=True(9.875s)
+[DEBUG] après insert red=9.750s → f_l=True(9.921s), f_r=True(9.921s), k_l=True(9.875s), k_r=True(9.875s)
+[SYNC] red=9.750s  fl=9.921s  fr=9.921s  kl=9.875s  kr=9.875s
+[DEBUG][probe] PTS pré-GPU: 10.171s
+[DEBUG][probe] PTS pré-GPU: 10.171s
+[META] side=right, raw PTS=10.375s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=10.250s, filename=/home/ivm/escargot/imgs_right_numbered/img00106.jpg
+[QUEUE] Received klv right, raw PTS=10.375s, red=10.250s
+[DEBUG] avant insert red=10.250s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=10.250s → f_l=False, f_r=False, k_l=False, k_r=True(10.375s)
+[META] side=left, raw PTS=10.375s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=10.250s, filename=/home/ivm/escargot/imgs_left_numbered/img00106.jpg
+[QUEUE] Received klv left, raw PTS=10.375s, red=10.250s
+[DEBUG] avant insert red=10.250s → f_l=False, f_r=False, k_l=False, k_r=True(10.375s)
+[DEBUG] après insert red=10.250s → f_l=False, f_r=False, k_l=True(10.375s), k_r=True(10.375s)
+[VIDEO] side=left, raw PTS=10.171s
+[VIDEO] side=right, raw PTS=10.171s
+Current offset: 0.125 Updated offset: 0.134143s
+[VIDEO] side=left, aligned PTS=10.000s
+Current offset: 0.125 Updated offset: 0.134159s
+[VIDEO] side=right, aligned PTS=10.000s
+[QUEUE] Received frame left, raw PTS=10.171s, red=10.000s
+[DEBUG] avant insert red=10.000s → f_l=False, f_r=False, k_l=True(10.125s), k_r=True(10.125s)
+[DEBUG] après insert red=10.000s → f_l=True(10.171s), f_r=False, k_l=True(10.125s), k_r=True(10.125s)
+[QUEUE] Received frame right, raw PTS=10.171s, red=10.000s
+[DEBUG] avant insert red=10.000s → f_l=True(10.171s), f_r=False, k_l=True(10.125s), k_r=True(10.125s)
+[DEBUG] après insert red=10.000s → f_l=True(10.171s), f_r=True(10.171s), k_l=True(10.125s), k_r=True(10.125s)
+[SYNC] red=10.000s  fl=10.171s  fr=10.171s  kl=10.125s  kr=10.125s
+[DEBUG][probe] PTS pré-GPU: 10.421s
+[DEBUG][probe] PTS pré-GPU: 10.421s
+[META] side=right, raw PTS=10.625s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=10.500s, filename=/home/ivm/escargot/imgs_right_numbered/img00107.jpg
+[QUEUE] Received klv right, raw PTS=10.625s, red=10.500s
+[DEBUG] avant insert red=10.500s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=10.500s → f_l=False, f_r=False, k_l=False, k_r=True(10.625s)
+[META] side=left, raw PTS=10.625s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=10.500s, filename=/home/ivm/escargot/imgs_left_numbered/img00107.jpg
+[QUEUE] Received klv left, raw PTS=10.625s, red=10.500s
+[DEBUG] avant insert red=10.500s → f_l=False, f_r=False, k_l=False, k_r=True(10.625s)
+[DEBUG] après insert red=10.500s → f_l=False, f_r=False, k_l=True(10.625s), k_r=True(10.625s)
+[VIDEO] side=left, raw PTS=10.421s
+[VIDEO] side=right, raw PTS=10.421s
+Current offset: 0.125 Updated offset: 0.134143s
+[VIDEO] side=left, aligned PTS=10.250s
+[QUEUE] Received frame left, raw PTS=10.421s, red=10.250s
+[DEBUG] avant insert red=10.250s → f_l=False, f_r=False, k_l=True(10.375s), k_r=True(10.375s)
+[DEBUG] après insert red=10.250s → f_l=True(10.421s), f_r=False, k_l=True(10.375s), k_r=True(10.375s)
+Current offset: 0.125 Updated offset: 0.134159s
+[VIDEO] side=right, aligned PTS=10.250s
+[QUEUE] Received frame right, raw PTS=10.421s, red=10.250s
+[DEBUG] avant insert red=10.250s → f_l=True(10.421s), f_r=False, k_l=True(10.375s), k_r=True(10.375s)
+[DEBUG] après insert red=10.250s → f_l=True(10.421s), f_r=True(10.421s), k_l=True(10.375s), k_r=True(10.375s)
+[SYNC] red=10.250s  fl=10.421s  fr=10.421s  kl=10.375s  kr=10.375s
+[DEBUG][probe] PTS pré-GPU: 10.671s
+[DEBUG][probe] PTS pré-GPU: 10.671s
+[META] side=left, raw PTS=10.875s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=10.750s, filename=/home/ivm/escargot/imgs_left_numbered/img00108.jpg
+[QUEUE] Received klv right, raw PTS=10.875s, red=10.750s
+[DEBUG] avant insert red=10.750s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=10.750s → f_l=False, f_r=False, k_l=False, k_r=True(10.875s)
+[QUEUE] Received klv left, raw PTS=10.875s, red=10.750s
+[DEBUG] avant insert red=10.750s → f_l=False, f_r=False, k_l=False, k_r=True(10.875s)
+[DEBUG] après insert red=10.750s → f_l=False, f_r=False, k_l=True(10.875s), k_r=True(10.875s)
+[VIDEO] side=left, raw PTS=10.671s
+Current offset: 0.125 Updated offset: 0.134209s
+[VIDEO] side=left, aligned PTS=10.500s
+[QUEUE] Received frame left, raw PTS=10.671s, red=10.500s
+[DEBUG] avant insert red=10.500s → f_l=False, f_r=False, k_l=True(10.625s), k_r=True(10.625s)
+[DEBUG] après insert red=10.500s → f_l=True(10.671s), f_r=False, k_l=True(10.625s), k_r=True(10.625s)
+[VIDEO] side=right, raw PTS=10.671s
+Current offset: 0.125 Updated offset: 0.134226s
+[VIDEO] side=right, aligned PTS=10.500s
+[QUEUE] Received frame right, raw PTS=10.671s, red=10.500s
+[DEBUG] avant insert red=10.500s → f_l=True(10.671s), f_r=False, k_l=True(10.625s), k_r=True(10.625s)
+[DEBUG] après insert red=10.500s → f_l=True(10.671s), f_r=True(10.671s), k_l=True(10.625s), k_r=True(10.625s)
+[SYNC] red=10.500s  fl=10.671s  fr=10.671s  kl=10.625s  kr=10.625s
+[DEBUG][probe] PTS pré-GPU: 10.921s
+[DEBUG][probe] PTS pré-GPU: 10.921s
+[META] side=right, raw PTS=11.125s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=11.000s, filename=/home/ivm/escargot/imgs_right_numbered/img00109.jpg
+[QUEUE] Received klv right, raw PTS=11.125s, red=11.000s
+[DEBUG] avant insert red=11.000s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=11.000s → f_l=False, f_r=False, k_l=False, k_r=True(11.125s)
+[META] side=left, raw PTS=11.125s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=11.000s, filename=/home/ivm/escargot/imgs_left_numbered/img00109.jpg
+[QUEUE] Received klv left, raw PTS=11.125s, red=11.000s
+[DEBUG] avant insert red=11.000s → f_l=False, f_r=False, k_l=False, k_r=True(11.125s)
+[DEBUG] après insert red=11.000s → f_l=False, f_r=False, k_l=True(11.125s), k_r=True(11.125s)
+[VIDEO] side=left, raw PTS=10.921s
+[VIDEO] side=right, raw PTS=10.921s
+Current offset: 0.125 Updated offset: 0.134144s
+[VIDEO] side=left, aligned PTS=10.750s
+Current offset: 0.125 Updated offset: 0.134160s
+[VIDEO] side=right, aligned PTS=10.750s
+[QUEUE] Received frame left, raw PTS=10.921s, red=10.750s
+[DEBUG] avant insert red=10.750s → f_l=False, f_r=False, k_l=True(10.875s), k_r=True(10.875s)
+[DEBUG] après insert red=10.750s → f_l=True(10.921s), f_r=False, k_l=True(10.875s), k_r=True(10.875s)
+[QUEUE] Received frame right, raw PTS=10.921s, red=10.750s
+[DEBUG] avant insert red=10.750s → f_l=True(10.921s), f_r=False, k_l=True(10.875s), k_r=True(10.875s)
+[DEBUG] après insert red=10.750s → f_l=True(10.921s), f_r=True(10.921s), k_l=True(10.875s), k_r=True(10.875s)
+[SYNC] red=10.750s  fl=10.921s  fr=10.921s  kl=10.875s  kr=10.875s
+[DEBUG][probe] PTS pré-GPU: 11.171s
+[DEBUG][probe] PTS pré-GPU: 11.171s
+[META] side=left, raw PTS=11.375s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=11.250s, filename=/home/ivm/escargot/imgs_left_numbered/img00110.jpg
+[QUEUE] Received klv left, raw PTS=11.375s, red=11.250s
+[DEBUG] avant insert red=11.250s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=11.250s → f_l=False, f_r=False, k_l=True(11.375s), k_r=False
+[META] side=right, raw PTS=11.375s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=11.250s, filename=/home/ivm/escargot/imgs_right_numbered/img00110.jpg
+[QUEUE] Received klv right, raw PTS=11.375s, red=11.250s
+[DEBUG] avant insert red=11.250s → f_l=False, f_r=False, k_l=True(11.375s), k_r=False
+[DEBUG] après insert red=11.250s → f_l=False, f_r=False, k_l=True(11.375s), k_r=True(11.375s)
+[VIDEO] side=right, raw PTS=11.171s
+[VIDEO] side=left, raw PTS=11.171s
+Current offset: 0.125 Updated offset: 0.134184s
+[VIDEO] side=left, aligned PTS=11.000s
+Current offset: 0.125 Updated offset: 0.134147s
+[VIDEO] side=right, aligned PTS=11.000s
+[QUEUE] Received frame left, raw PTS=11.171s, red=11.000s
+[DEBUG] avant insert red=11.000s → f_l=False, f_r=False, k_l=True(11.125s), k_r=True(11.125s)
+[DEBUG] après insert red=11.000s → f_l=True(11.171s), f_r=False, k_l=True(11.125s), k_r=True(11.125s)
+[QUEUE] Received frame right, raw PTS=11.171s, red=11.000s
+[DEBUG] avant insert red=11.000s → f_l=True(11.171s), f_r=False, k_l=True(11.125s), k_r=True(11.125s)
+[DEBUG] après insert red=11.000s → f_l=True(11.171s), f_r=True(11.171s), k_l=True(11.125s), k_r=True(11.125s)
+[SYNC] red=11.000s  fl=11.171s  fr=11.171s  kl=11.125s  kr=11.125s
+[DEBUG][probe] PTS pré-GPU: 11.421s
+[DEBUG][probe] PTS pré-GPU: 11.421s
+[META] side=left, raw PTS=11.625s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=11.500s, filename=/home/ivm/escargot/imgs_left_numbered/img00111.jpg
+[META] side=right, raw PTS=11.625s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=11.500s, filename=/home/ivm/escargot/imgs_right_numbered/img00111.jpg
+[QUEUE] Received klv left, raw PTS=11.625s, red=11.500s
+[DEBUG] avant insert red=11.500s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=11.500s → f_l=False, f_r=False, k_l=True(11.625s), k_r=False
+[QUEUE] Received klv right, raw PTS=11.625s, red=11.500s
+[DEBUG] avant insert red=11.500s → f_l=False, f_r=False, k_l=True(11.625s), k_r=False
+[DEBUG] après insert red=11.500s → f_l=False, f_r=False, k_l=True(11.625s), k_r=True(11.625s)
+[VIDEO] side=left, raw PTS=11.421s
+[VIDEO] side=right, raw PTS=11.421s
+Current offset: 0.125 Updated offset: 0.134144s
+[VIDEO] side=left, aligned PTS=11.250s
+Current offset: 0.125 Updated offset: 0.134151s
+[VIDEO] side=right, aligned PTS=11.250s
+[QUEUE] Received frame left, raw PTS=11.421s, red=11.250s
+[DEBUG] avant insert red=11.250s → f_l=False, f_r=False, k_l=True(11.375s), k_r=True(11.375s)
+[DEBUG] après insert red=11.250s → f_l=True(11.421s), f_r=False, k_l=True(11.375s), k_r=True(11.375s)
+[QUEUE] Received frame right, raw PTS=11.421s, red=11.250s
+[DEBUG] avant insert red=11.250s → f_l=True(11.421s), f_r=False, k_l=True(11.375s), k_r=True(11.375s)
+[DEBUG] après insert red=11.250s → f_l=True(11.421s), f_r=True(11.421s), k_l=True(11.375s), k_r=True(11.375s)
+[SYNC] red=11.250s  fl=11.421s  fr=11.421s  kl=11.375s  kr=11.375s
+[DEBUG][probe] PTS pré-GPU: 11.671s
+[DEBUG][probe] PTS pré-GPU: 11.671s
+[META] side=left, raw PTS=11.875s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=11.750s, filename=/home/ivm/escargot/imgs_left_numbered/img00112.jpg
+[META] side=right, raw PTS=11.875s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=11.750s, filename=/home/ivm/escargot/imgs_right_numbered/img00112.jpg
+[QUEUE] Received klv left, raw PTS=11.875s, red=11.750s
+[DEBUG] avant insert red=11.750s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=11.750s → f_l=False, f_r=False, k_l=True(11.875s), k_r=False
+[QUEUE] Received klv right, raw PTS=11.875s, red=11.750s
+[DEBUG] avant insert red=11.750s → f_l=False, f_r=False, k_l=True(11.875s), k_r=False
+[DEBUG] après insert red=11.750s → f_l=False, f_r=False, k_l=True(11.875s), k_r=True(11.875s)
+[VIDEO] side=left, raw PTS=11.671s
+[VIDEO] side=right, raw PTS=11.671s
+Current offset: 0.125 Updated offset: 0.134140s
+[VIDEO] side=left, aligned PTS=11.500s
+[QUEUE] Received frame left, raw PTS=11.671s, red=11.500s
+[DEBUG] avant insert red=11.500s → f_l=False, f_r=False, k_l=True(11.625s), k_r=True(11.625s)
+  ��!$is   �!$is  0�!$is  `�!$is  �"$is  �"$is  �"$is   ("$is  P4"$is  �@"$is  �L"$is  �X"$is  e"$is  @q"$is  p}"$is  ��"$is  Е"$is   �"$is  0�"$is  `�"$is  ��"$is  ��"$is  ��"$is[DEBUG] après insert red=11.500s → f_l=True(11.671s), f_r=False, k_l=True(11.625s), k_r=True(11.625s)
+Current offset: 0.125 Updated offset: 0.134152s
+[VIDEO] side=right, aligned PTS=11.500s
+[QUEUE] Received frame right, raw PTS=11.671s, red=11.500s
+[DEBUG] avant insert red=11.500s → f_l=True(11.671s), f_r=False, k_l=True(11.625s), k_r=True(11.625s)
+[DEBUG] après insert red=11.500s → f_l=True(11.671s), f_r=True(11.671s), k_l=True(11.625s), k_r=True(11.625s)
+[SYNC] red=11.500s  fl=11.671s  fr=11.671s  kl=11.625s  kr=11.625s
+[DEBUG][probe] PTS pré-GPU: 11.921s
+[DEBUG][probe] PTS pré-GPU: 11.921s
+[META] side=left, raw PTS=12.125s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=12.000s, filename=/home/ivm/escargot/imgs_left_numbered/img00113.jpg
+[QUEUE] Received klv left, raw PTS=12.125s, red=12.000s
+[DEBUG] avant insert red=12.000s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=12.000s → f_l=False, f_r=False, k_l=True(12.125s), k_r=False
+[META] side=right, raw PTS=12.125s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=12.000s, filename=/home/ivm/escargot/imgs_right_numbered/img00113.jpg
+[QUEUE] Received klv right, raw PTS=12.125s, red=12.000s
+[DEBUG] avant insert red=12.000s → f_l=False, f_r=False, k_l=True(12.125s), k_r=False
+[DEBUG] après insert red=12.000s → f_l=False, f_r=False, k_l=True(12.125s), k_r=True(12.125s)
+[VIDEO] side=left, raw PTS=11.921s
+[VIDEO] side=right, raw PTS=11.921s
+Current offset: 0.125 Updated offset: 0.134163s
+[VIDEO] side=right, aligned PTS=11.750s
+[QUEUE] Received frame right, raw PTS=11.921s, red=11.750s
+[DEBUG] avant insert red=11.750s → f_l=False, f_r=False, k_l=True(11.875s), k_r=True(11.875s)
+[DEBUG] après insert red=11.750s → f_l=False, f_r=True(11.921s), k_l=True(11.875s), k_r=True(11.875s)
+Current offset: 0.125 Updated offset: 0.134146s
+[VIDEO] side=left, aligned PTS=11.750s
+[QUEUE] Received frame left, raw PTS=11.921s, red=11.750s
+[DEBUG] avant insert red=11.750s → f_l=False, f_r=True(11.921s), k_l=True(11.875s), k_r=True(11.875s)
+[DEBUG] après insert red=11.750s → f_l=True(11.921s), f_r=True(11.921s), k_l=True(11.875s), k_r=True(11.875s)
+[SYNC] red=11.750s  fl=11.921s  fr=11.921s  kl=11.875s  kr=11.875s
+[DEBUG][probe] PTS pré-GPU: 12.171s
+[DEBUG][probe] PTS pré-GPU: 12.171s
+[META] side=right, raw PTS=12.375s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=12.250s, filename=/home/ivm/escargot/imgs_right_numbered/img00114.jpg
+[QUEUE] Received klv right, raw PTS=12.375s, red=12.250s
+[DEBUG] avant insert red=12.250s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=12.250s → f_l=False, f_r=False, k_l=False, k_r=True(12.375s)
+[META] side=left, raw PTS=12.375s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=12.250s, filename=/home/ivm/escargot/imgs_left_numbered/img00114.jpg
+[QUEUE] Received klv left, raw PTS=12.375s, red=12.250s
+[DEBUG] avant insert red=12.250s → f_l=False, f_r=False, k_l=False, k_r=True(12.375s)
+[DEBUG] après insert red=12.250s → f_l=False, f_r=False, k_l=True(12.375s), k_r=True(12.375s)
+[VIDEO] side=left, raw PTS=12.171s
+[VIDEO] side=right, raw PTS=12.171s
+Current offset: 0.125 Updated offset: 0.134146s
+[VIDEO] side=left, aligned PTS=12.000s
+[QUEUE] Received frame left, raw PTS=12.171s, red=12.000s
+[DEBUG] avant insert red=12.000s → f_l=False, f_r=False, k_l=True(12.125s), k_r=True(12.125s)
+[DEBUG] après insert red=12.000s → f_l=True(12.171s), f_r=False, k_l=True(12.125s), k_r=True(12.125s)
+Current offset: 0.125 Updated offset: 0.134160s
+[VIDEO] side=right, aligned PTS=12.000s
+[QUEUE] Received frame right, raw PTS=12.171s, red=12.000s
+[DEBUG] avant insert red=12.000s → f_l=True(12.171s), f_r=False, k_l=True(12.125s), k_r=True(12.125s)
+[DEBUG] après insert red=12.000s → f_l=True(12.171s), f_r=True(12.171s), k_l=True(12.125s), k_r=True(12.125s)
+[SYNC] red=12.000s  fl=12.171s  fr=12.171s  kl=12.125s  kr=12.125s
+[DEBUG][probe] PTS pré-GPU: 12.421s
+[DEBUG][probe] PTS pré-GPU: 12.421s
+[META] side=right, raw PTS=12.625s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=12.500s, filename=/home/ivm/escargot/imgs_right_numbered/img00115.jpg
+[QUEUE] Received klv right, raw PTS=12.625s, red=12.500s
+[DEBUG] avant insert red=12.500s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=12.500s → f_l=False, f_r=False, k_l=False, k_r=True(12.625s)
+[META] side=left, raw PTS=12.625s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=12.500s, filename=/home/ivm/escargot/imgs_left_numbered/img00115.jpg
+[QUEUE] Received klv left, raw PTS=12.625s, red=12.500s
+[DEBUG] avant insert red=12.500s → f_l=False, f_r=False, k_l=False, k_r=True(12.625s)
+[DEBUG] après insert red=12.500s → f_l=False, f_r=False, k_l=True(12.625s), k_r=True(12.625s)
+[VIDEO] side=left, raw PTS=12.421s
+[VIDEO] side=right, raw PTS=12.421s
+Current offset: 0.125 Updated offset: 0.134159s
+[VIDEO] side=right, aligned PTS=12.250s
+Current offset: 0.125 Updated offset: 0.134142s
+[VIDEO] side=left, aligned PTS=12.250s
+[QUEUE] Received frame right, raw PTS=12.421s, red=12.250s
+[DEBUG] avant insert red=12.250s → f_l=False, f_r=False, k_l=True(12.375s), k_r=True(12.375s)
+[DEBUG] après insert red=12.250s → f_l=False, f_r=True(12.421s), k_l=True(12.375s), k_r=True(12.375s)
+[QUEUE] Received frame left, raw PTS=12.421s, red=12.250s
+[DEBUG] avant insert red=12.250s → f_l=False, f_r=True(12.421s), k_l=True(12.375s), k_r=True(12.375s)
+[DEBUG] après insert red=12.250s → f_l=True(12.421s), f_r=True(12.421s), k_l=True(12.375s), k_r=True(12.375s)
+[SYNC] red=12.250s  fl=12.421s  fr=12.421s  kl=12.375s  kr=12.375s
+[DEBUG][probe] PTS pré-GPU: 12.671s
+[DEBUG][probe] PTS pré-GPU: 12.671s
+[META] side=left, raw PTS=12.875s
+[META] side=right, raw PTS=12.875s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=12.750s, filename=/home/ivm/escargot/imgs_right_numbered/img00116.jpg
+[QUEUE] Received klv right, raw PTS=12.875s, red=12.750s
+[DEBUG] avant insert red=12.750s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=12.750s → f_l=False, f_r=False, k_l=False, k_r=True(12.875s)
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=12.750s, filename=/home/ivm/escargot/imgs_left_numbered/img00116.jpg
+[QUEUE] Received klv left, raw PTS=12.875s, red=12.750s
+[DEBUG] avant insert red=12.750s → f_l=False, f_r=False, k_l=False, k_r=True(12.875s)
+[DEBUG] après insert red=12.750s → f_l=False, f_r=False, k_l=True(12.875s), k_r=True(12.875s)
+[VIDEO] side=left, raw PTS=12.671s
+[VIDEO] side=right, raw PTS=12.671s
+Current offset: 0.125 Updated offset: 0.134161s
+[VIDEO] side=right, aligned PTS=12.500s
+Current offset: 0.125 Updated offset: 0.134142s
+[VIDEO] side=left, aligned PTS=12.500s
+[QUEUE] Received frame right, raw PTS=12.671s, red=12.500s
+[DEBUG] avant insert red=12.500s → f_l=False, f_r=False, k_l=True(12.625s), k_r=True(12.625s)
+[DEBUG] après insert red=12.500s → f_l=False, f_r=True(12.671s), k_l=True(12.625s), k_r=True(12.625s)
+[QUEUE] Received frame left, raw PTS=12.671s, red=12.500s
+[DEBUG] avant insert red=12.500s → f_l=False, f_r=True(12.671s), k_l=True(12.625s), k_r=True(12.625s)
+[DEBUG] après insert red=12.500s → f_l=True(12.671s), f_r=True(12.671s), k_l=True(12.625s), k_r=True(12.625s)
+[SYNC] red=12.500s  fl=12.671s  fr=12.671s  kl=12.625s  kr=12.625s
+[DEBUG][probe] PTS pré-GPU: 12.921s
+[DEBUG][probe] PTS pré-GPU: 12.921s
+[META] side=left, raw PTS=13.125s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=13.000s, filename=/home/ivm/escargot/imgs_left_numbered/img00117.jpg
+[META] side=right, raw PTS=13.125s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=13.000s, filename=/home/ivm/escargot/imgs_right_numbered/img00117.jpg
+[QUEUE] Received klv left, raw PTS=13.125s, red=13.000s
+[DEBUG] avant insert red=13.000s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=13.000s → f_l=False, f_r=False, k_l=True(13.125s), k_r=False
+[QUEUE] Received klv right, raw PTS=13.125s, red=13.000s
+[DEBUG] avant insert red=13.000s → f_l=False, f_r=False, k_l=True(13.125s), k_r=False
+[DEBUG] après insert red=13.000s → f_l=False, f_r=False, k_l=True(13.125s), k_r=True(13.125s)
+[VIDEO] side=left, raw PTS=12.921s
+[VIDEO] side=right, raw PTS=12.921s
+Current offset: 0.125 Updated offset: 0.134160s
+[VIDEO] side=right, aligned PTS=12.750s
+Current offset: 0.125 Updated offset: 0.134149s
+[VIDEO] side=left, aligned PTS=12.750s
+[QUEUE] Received frame right, raw PTS=12.921s, red=12.750s
+[DEBUG] avant insert red=12.750s → f_l=False, f_r=False, k_l=True(12.875s), k_r=True(12.875s)
+[DEBUG] après insert red=12.750s → f_l=False, f_r=True(12.921s), k_l=True(12.875s), k_r=True(12.875s)
+[QUEUE] Received frame left, raw PTS=12.921s, red=12.750s
+[DEBUG] avant insert red=12.750s → f_l=False, f_r=True(12.921s), k_l=True(12.875s), k_r=True(12.875s)
+[DEBUG] après insert red=12.750s → f_l=True(12.921s), f_r=True(12.921s), k_l=True(12.875s), k_r=True(12.875s)
+[SYNC] red=12.750s  fl=12.921s  fr=12.921s  kl=12.875s  kr=12.875s
+[DEBUG][probe] PTS pré-GPU: 13.171s
+[DEBUG][probe] PTS pré-GPU: 13.171s
+[META] side=right, raw PTS=13.375s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=13.250s, filename=/home/ivm/escargot/imgs_right_numbered/img00118.jpg
+[META] side=left, raw PTS=13.375s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=13.250s, filename=/home/ivm/escargot/imgs_left_numbered/img00118.jpg
+[QUEUE] Received klv right, raw PTS=13.375s, red=13.250s
+[DEBUG] avant insert red=13.250s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=13.250s → f_l=False, f_r=False, k_l=False, k_r=True(13.375s)
+[QUEUE] Received klv left, raw PTS=13.375s, red=13.250s
+[DEBUG] avant insert red=13.250s → f_l=False, f_r=False, k_l=False, k_r=True(13.375s)
+[DEBUG] après insert red=13.250s → f_l=False, f_r=False, k_l=True(13.375s), k_r=True(13.375s)
+[VIDEO] side=left, raw PTS=13.171s
+[VIDEO] side=right, raw PTS=13.171s
+Current offset: 0.125 Updated offset: 0.134198s
+[VIDEO] side=right, aligned PTS=13.000s
+Current offset: 0.125 Updated offset: 0.134185s
+[VIDEO] side=left, aligned PTS=13.000s
+[QUEUE] Received frame right, raw PTS=13.171s, red=13.000s
+[DEBUG] avant insert red=13.000s → f_l=False, f_r=False, k_l=True(13.125s), k_r=True(13.125s)
+[DEBUG] après insert red=13.000s → f_l=False, f_r=True(13.171s), k_l=True(13.125s), k_r=True(13.125s)
+[QUEUE] Received frame left, raw PTS=13.171s, red=13.000s
+[DEBUG] avant insert red=13.000s → f_l=False, f_r=True(13.171s), k_l=True(13.125s), k_r=True(13.125s)
+[DEBUG] après insert red=13.000s → f_l=True(13.171s), f_r=True(13.171s), k_l=True(13.125s), k_r=True(13.125s)
+[SYNC] red=13.000s  fl=13.171s  fr=13.171s  kl=13.125s  kr=13.125s
+[DEBUG][probe] PTS pré-GPU: 13.421s
+[DEBUG][probe] PTS pré-GPU: 13.421s
+[META] side=left, raw PTS=13.625s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=left, aligned PTS=13.500s, filename=/home/ivm/escargot/imgs_left_numbered/img00119.jpg
+[META] side=right, raw PTS=13.625s
+Current offset: 0.125 Updated offset: 0.125000s
+[META] side=right, aligned PTS=13.500s, filename=/home/ivm/escargot/imgs_right_numbered/img00119.jpg
+[QUEUE] Received klv left, raw PTS=13.625s, red=13.500s
+[DEBUG] avant insert red=13.500s → f_l=False, f_r=False, k_l=False, k_r=False
+[DEBUG] après insert red=13.500s → f_l=False, f_r=False, k_l=True(13.625s), k_r=False
+[QUEUE] Received klv right, raw PTS=13.625s, red=13.500s
+[DEBUG] avant insert red=13.500s → f_l=False, f_r=False, k_l=True(13.625s), k_r=False
+[DEBUG] après insert red=13.500s → f_l=False, f_r=False, k_l=True(13.625s), k_r=True(13.625s)
+[VIDEO] side=left, raw PTS=13.421s
+[VIDEO] side=right, raw PTS=13.421s
+Current offset: 0.125 Updated offset: 0.134143s
+[VIDEO] side=left, aligned PTS=13.250s
+[QUEUE] Received frame left, raw PTS=13.421s, red=13.250s
+[DEBUG] avant insert red=13.250s → f_l=False, f_r=False, k_l=True(13.375s), k_r=True(13.375s)
+[DEBUG] après insert red=13.250s → f_l=True(13.421s), f_r=False, k_l=True(13.375s), k_r=True(13.375s)
+Current offset: 0.125 Updated offset: 0.134161s
+[VIDEO] side=right, aligned PTS=13.250s
+[QUEUE] Received frame right, raw PTS=13.421s, red=13.250s
+[DEBUG] avant insert red=13.250s → f_l=True(13.421s), f_r=False, k_l=True(13.375s), k_r=True(13.375s)
+[DEBUG] après insert red=13.250s → f_l=True(13.421s), f_r=True(13.421s), k_l=True(13.375s), k_r=True(13.375s)
+[SYNC] red=13.250s  fl=13.421s  fr=13.421s  kl=13.375s  kr=13.375s
+[DEBUG][probe] PTS pré-GPU: 13.671s
+[DEBUG][probe] PTS pré-GPU: 13.671s
+[RUN] Interrupted by user
+[RUN] Pipeline stopped

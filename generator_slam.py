@@ -87,12 +87,12 @@ def main():
     pipeline_desc = (
         # Video left
         f"appsrc name=vid_left caps=\"image/jpeg,framerate={FPS}/1\" is-live=true block=true format=time ! "
-        "decodebin ! videoconvert ! video/x-raw,format=I420 ! jpegenc ! rtpjpegpay mtu=1316 ! "
+        "decodebin ! videoconvert ! video/x-raw,format=I420 ! jpegenc name=chk1 ! rtpjpegpay mtu=1316 ! "
         f"srtserversink uri={VIDEO_SRT_URI_LEFT} "
 
         # Video right
         f"appsrc name=vid_right caps=\"image/jpeg,framerate={FPS}/1\" is-live=true block=true format=time ! "
-        "decodebin ! videoconvert ! video/x-raw,format=I420 ! jpegenc ! rtpjpegpay mtu=1316 ! "
+        "decodebin ! videoconvert ! video/x-raw,format=I420 ! jpegenc name=chk2 ! rtpjpegpay mtu=1316 ! "
         f"srtserversink uri={VIDEO_SRT_URI_RIGHT} "
 
         # Metadata left with pacing by PTS
