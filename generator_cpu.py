@@ -38,6 +38,9 @@ frame_duration = Gst.SECOND // FPS
 video_indexes = {IMAGE_DIR_LEFT: 1, IMAGE_DIR_RIGHT: 1}
 meta_indexes  = {IMAGE_DIR_LEFT: 1, IMAGE_DIR_RIGHT: 1}
 
+
+frame_pts = {}
+
 def on_need_data_video(appsrc, length, image_dir):
     idx = video_indexes[image_dir]
     path = os.path.join(image_dir, PATTERN % idx)
@@ -115,6 +118,30 @@ def main():
     pipeline.get_by_name('vid_right').connect('need-data', on_need_data_video, IMAGE_DIR_RIGHT)
     pipeline.get_by_name('klv_left').connect('need-data', make_meta_callback(IMAGE_DIR_LEFT))
     pipeline.get_by_name('klv_right').connect('need-data', make_meta_callback(IMAGE_DIR_RIGHT))
+
+    # Helper to record and display 4 PTS per frame
+    def pad_probe_callback(pad, info, name):
+        buf = info.get_buffer()
+        if buf:
+            pts_sec = buf.pts / Gst.SECOND
+            frame_idx = int(buf.pts / frame_duration) + 1
+            if frame_idx not in frame_pts:
+                frame_pts[frame_idx] = {}
+            frame_pts[frame_idx][name] = pts_sec
+            if len(frame_pts[frame_idx]) == 4:
+                pts = frame_pts.pop(frame_idx)
+                print(f"[FRAME {frame_idx}] chk1_out={pts.get('chk1_out'):.3f}s, chk2_out={pts.get('chk2_out'):.3f}s, klv_left={pts.get('klv_left'):.3f}s, klv_right={pts.get('klv_right'):.3f}s")
+        return Gst.PadProbeReturn.OK
+
+    # Attach probes to pads
+    for name in ['chk1', 'chk2']:
+        elem = pipeline.get_by_name(name)
+        pad = elem.get_static_pad('src')
+        pad.add_probe(Gst.PadProbeType.BUFFER, lambda pad, info, n=name: pad_probe_callback(pad, info, f"{n}_out"))
+    for n in ['klv_left', 'klv_right']:
+        elem = pipeline.get_by_name(n)
+        pad = elem.get_static_pad('src')
+        pad.add_probe(Gst.PadProbeType.BUFFER, lambda pad, info, n=n: pad_probe_callback(pad, info, n))
 
     # Bus and loop
     loop = GLib.MainLoop()
