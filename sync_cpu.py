@@ -50,6 +50,7 @@ class SRTSyncClient:
         self.lock = threading.Lock()
         self.running = True
         self.start_pts = None
+        self.pts_precision = 1/FPS
 
         threading.Thread(target=self._process_samples, daemon=True).start()
         self._build_pipeline()
@@ -192,12 +193,12 @@ class SRTSyncClient:
         pts = buf.pts / Gst.SECOND
         print(f"[VIDEO] side={side}, raw PTS={pts:.3f}s")
 
-        # if pts <= SKIP:
-        #     return Gst.FlowReturn.OK
-
-        red = self._align_pts(pts)
-        if red < SKIP:
+        if pts <= SKIP:
             return Gst.FlowReturn.OK
+
+        # red = self._align_pts(pts)
+        # if red < SKIP:
+        #     return Gst.FlowReturn.OK
 
         if self.start_pts is None:
             self.start_pts = pts
@@ -219,9 +220,29 @@ class SRTSyncClient:
             # frame_rgb = np.ndarray((height, width, 3), dtype=np.uint8, buffer=info.data)
             # buf.unmap(info)
             # frame_img = cv2.cvtColor(frame_rgb, cv2.COLOR_RGB2BGR)
-        print(f"[VIDEO] side={side}, aligned PTS={red:.3f}s")
-        self.sample_queue.put(('frame', side, frame_img, pts, red))
+
+        base_aligned = self._align_pts(pts)
+        # check raw KLV stored for this bucket
+        ent = self.sync_buffer[base_aligned]
+        raw_klv = ent.get(f'pts_klv_{side}')
+        if raw_klv is not None and raw_klv > pts:
+            aligned = base_aligned - self.pts_precision
+            print(f"[VIDEO] side={side}, raw KLV {raw_klv:.3f}s > raw frame {pts:.3f}s, moving to {aligned:.3f}s")
+        else:
+            aligned = base_aligned
+            print(f"[VIDEO] side={side}, aligned={aligned:.3f}s")
+        ent = self.sync_buffer[aligned]
+        ent[f'f_{side}'] = frame_img
+        ent[f'pts_frame_{side}'] = pts
+        self.sample_queue.put(('frame', side, frame_img, pts, aligned))
         return Gst.FlowReturn.OK
+        # print(f"[VIDEO] side={side}, aligned PTS={red:.3f}s")
+        # self.sample_queue.put(('frame', side, frame_img, pts, red))
+        # return Gst.FlowReturn.OK
+
+
+
+
 
     def _align_pts(self, pts):
         if pts < 0:
