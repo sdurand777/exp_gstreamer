@@ -45,16 +45,16 @@ class SRTSyncClient:
     def _build_pipeline(self):
         desc = (
             f"srtsrc latency=1000 uri={VIDEO_SRT_URI_LEFT} ! queue !"
-            "application/x-rtp,media=video,encoding-name=JPEG,payload=26 ! rtpjpegdepay name=dep_l ! nvjpegdec ! tee name=tee_l "
+            f"application/x-rtp,media=video,encoding-name=JPEG,payload=26,framerate={FPS}/1 ! rtpjpegdepay name=dep_l ! nvjpegdec ! tee name=tee_l "
             "tee_l. ! queue ! videoconvert ! video/x-raw,format=RGB ! appsink name=vid_l emit-signals=true sync=true "
             "tee_l. ! fakesink sync=false "
             f"srtsrc latency=1000 uri={VIDEO_SRT_URI_RIGHT} ! queue !"
-            "application/x-rtp,media=video,encoding-name=JPEG,payload=26 ! rtpjpegdepay name=dep_r ! nvjpegdec ! tee name=tee_r "
+            f"application/x-rtp,media=video,encoding-name=JPEG,payload=26,framerate={FPS}/1 ! rtpjpegdepay name=dep_r ! nvjpegdec ! tee name=tee_r "
             "tee_r. ! queue ! videoconvert ! video/x-raw,format=RGB ! appsink name=vid_r emit-signals=true sync=true "
             "tee_r. ! fakesink sync=false "
             f"tcpclientsrc host={TCP_HOST} port={TCP_PORT} ! tsdemux name=dmx "
-            "dmx. ! queue ! meta/x-klv,parsed=true ! appsink name=klv_l emit-signals=true sync=false drop=false "
-            "dmx. ! queue ! meta/x-klv,parsed=true ! appsink name=klv_r emit-signals=true sync=false drop=false"
+            f"dmx. ! queue ! meta/x-klv,parsed=true,framerate={FPS}/1 ! appsink name=klv_l emit-signals=true sync=false drop=false "
+            f"dmx. ! queue ! meta/x-klv,parsed=true,framerate={FPS}/1 ! appsink name=klv_r emit-signals=true sync=false drop=false"
         )
         print("[PIPELINE] Launching pipeline:\n", desc)
         pipe = Gst.parse_launch(desc)
